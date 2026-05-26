@@ -31,6 +31,34 @@ public class AuditTrail {
         this.timestamp = LocalDateTime.now();
     }
 
+    public Decision getDecision() {
+        return decision;
+    }
+
+    public List<EthicalAnalysisResult> getResults() {
+        return results;
+    }
+
+    public String getVerdict() {
+        return verdict;
+    }
+
+    public String getConflictSummary() {
+        return conflictSummary;
+    }
+
+    public String getRemediation() {
+        return remediation;
+    }
+
+    public List<String> getSolutionPaths() {
+        return solutionPaths;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
     public String toTextReport() {
         StringBuilder sb = new StringBuilder();
         String timeLabel = timestamp.format(DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"));

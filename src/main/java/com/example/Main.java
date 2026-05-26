@@ -2,7 +2,7 @@ package com.example;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import view.DashboardView;
+import view.AppNavigator;
 
 /**
  * Main class for the Ethical Decision Engine application.
@@ -18,9 +18,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Create and show the dashboard
-        DashboardView dashboard = new DashboardView(primaryStage);
-        dashboard.show();
+        new AppNavigator(primaryStage).show();
     }
 
     public static void main(String[] args) {
