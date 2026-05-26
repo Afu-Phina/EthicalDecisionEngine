@@ -1,0 +1,13 @@
+model\AuditTrail.class
+strategy\JusticeStrategy.class
+model\EthicalAnalysisResult.class
+view\DashboardView.class
+factory\EthicalStrategyFactory.class
+com\example\Main.class
+strategy\DeontologicalStrategy.class
+strategy\EthicalStrategy.class
+strategy\VirtueStrategy.class
+controller\EthicalAnalysisController.class
+model\Decision.class
+database\DatabaseConnection.class
+strategy\UtilitarianStrategy.class
