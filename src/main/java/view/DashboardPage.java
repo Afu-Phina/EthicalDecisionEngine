@@ -131,8 +131,8 @@ public class DashboardPage implements AppPage {
     private HBox createOverviewGrid() {
         VBox totalCard = createStatCard("Completed Analyses", totalAnalysesLabel, new Label("Live operational scorecard for every reviewed decision."));
         VBox scoreCard = createStatCard("Average Ethical Score", averageScoreLabel, new Label("Performance across all frameworks."));
-        VBox conflictCard = createStatCard("Latest Conflict Alert", new Label(""), conflictSummaryLabel);
-        VBox verdictCard = createStatCard("Latest Verdict", new Label(""), verdictSummaryLabel);
+        VBox conflictCard = createStatCard("Latest Conflict Alert", conflictSummaryLabel, new Label("Most recent conflict detected in your analyses."));
+        VBox verdictCard = createStatCard("Latest Verdict", verdictSummaryLabel, new Label("Ethical framework consensus from latest review."));
 
         HBox row = new HBox(18, totalCard, scoreCard, conflictCard, verdictCard);
         row.setFillHeight(true);

@@ -6,7 +6,9 @@ C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\strategy\UtilitarianStr
 C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\view\NewAnalysisPage.java
 C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\view\DashboardPage.java
 C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\view\AuditHistoryPage.java
+C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\report\PdfAuditReportGenerator.java
 C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\database\DatabaseConnection.java
+C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\report\AuditReportService.java
 C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\model\Decision.java
 C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\view\DashboardView.java
 C:\Users\SIS\Desktop\EthicalDecisionEngine\src\main\java\controller\EthicalAnalysisController.java

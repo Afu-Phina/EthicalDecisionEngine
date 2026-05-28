@@ -17,13 +17,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import model.AuditTrail;
+import report.AuditReportService;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class AuditHistoryPage implements AppPage {
     private final VBox root;
@@ -72,7 +71,7 @@ public class AuditHistoryPage implements AppPage {
             });
         });
 
-        Button exportButton = new Button("Export Full History");
+        Button exportButton = new Button("Export PDF Reports");
         exportButton.getStyleClass().add("primary-button");
         exportButton.setOnAction(event -> exportHistory());
 
@@ -132,26 +131,21 @@ public class AuditHistoryPage implements AppPage {
 
         Window owner = root.getScene() == null ? null : root.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Export Audit History");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        fileChooser.setInitialFileName("ethical-audit-history.txt");
+        fileChooser.setTitle("Export Ethics Report");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        fileChooser.setInitialFileName("Ethical_Audit_Report.pdf");
 
         File file = fileChooser.showSaveDialog(owner);
         if (file == null) {
             return;
         }
 
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write(buildHistoryReport(tableData));
-            overviewLabel.setText("Audit history exported to " + file.getName() + ".");
+        try {
+            AuditTrail latest = tableData.get(0);
+            AuditReportService.exportAuditReportToPath(latest, file.getAbsolutePath());
+            overviewLabel.setText("Latest audit report exported to " + file.getName() + ".");
         } catch (IOException e) {
-            overviewLabel.setText("Unable to export history: " + e.getMessage());
+            overviewLabel.setText("Unable to export report: " + e.getMessage());
         }
-    }
-
-    private String buildHistoryReport(List<AuditTrail> audits) {
-        return audits.stream()
-                .map(AuditTrail::toTextReport)
-                .collect(Collectors.joining(System.lineSeparator() + System.lineSeparator()));
     }
 }

@@ -20,6 +20,7 @@ import javafx.stage.Window;
 import model.AuditTrail;
 import model.Decision;
 import model.EthicalAnalysisResult;
+import report.AuditReportService;
 
 public class NewAnalysisPage implements AppPage {
     private final VBox root;
@@ -140,7 +141,7 @@ public class NewAnalysisPage implements AppPage {
         analyzeButton.getStyleClass().add("primary-button");
         analyzeButton.setOnAction(event -> executeAnalysis());
 
-        Button exportButton = new Button("Export Audit Trail");
+        Button exportButton = new Button("Export PDF Report");
         exportButton.getStyleClass().add("secondary-button");
         exportButton.setOnAction(event -> exportAuditTrail());
 
@@ -221,18 +222,7 @@ public class NewAnalysisPage implements AppPage {
 
     private void exportAuditTrail() {
         if (decisionInput.getText().trim().isEmpty()) {
-            statusLabel.setText("Run an analysis before exporting the audit trail.");
-            return;
-        }
-
-        Window owner = root.getScene() == null ? null : root.getScene().getWindow();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Export Audit Trail");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        fileChooser.setInitialFileName("ethical-decision-audit.txt");
-
-        File file = fileChooser.showSaveDialog(owner);
-        if (file == null) {
+            statusLabel.setText("Run an analysis before exporting the PDF report.");
             return;
         }
 
@@ -246,11 +236,22 @@ public class NewAnalysisPage implements AppPage {
         List<EthicalAnalysisResult> results = controller.analyzeDecision(decision);
         AuditTrail auditTrail = controller.buildAuditTrail(decision, results);
 
+        Window owner = root.getScene() == null ? null : root.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Ethics Audit Report");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        fileChooser.setInitialFileName("Ethical_Decision_Report.pdf");
+
+        File file = fileChooser.showSaveDialog(owner);
+        if (file == null) {
+            return;
+        }
+
         try {
-            saveReportToFile(auditTrail.toTextReport(), file);
-            statusLabel.setText("Audit trail exported to " + file.getName() + ".");
+            AuditReportService.exportAuditReportToPath(auditTrail, file.getAbsolutePath());
+            statusLabel.setText("PDF report exported to " + file.getName() + ".");
         } catch (IOException e) {
-            statusLabel.setText("Failed to export audit trail: " + e.getMessage());
+            statusLabel.setText("Failed to export PDF report: " + e.getMessage());
         }
     }
 

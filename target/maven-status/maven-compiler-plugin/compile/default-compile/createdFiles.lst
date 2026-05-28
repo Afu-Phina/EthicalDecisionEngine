@@ -10,7 +10,9 @@ view\AuditHistoryPage.class
 view\NewAnalysisPage.class
 view\AppNavigator.class
 view\AppPage.class
+report\PdfAuditReportGenerator.class
 strategy\EthicalStrategy.class
+report\AuditReportService.class
 strategy\VirtueStrategy.class
 controller\EthicalAnalysisController.class
 model\Decision.class
