@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import controller.EthicalAnalysisController;
-import javafx.animation.FadeTransition;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import model.AuditTrail;
+import view.TransitionUtils;
+import view.BackgroundVideoPane;
 
 public class AppNavigator {
     private final Stage primaryStage;
@@ -40,7 +40,10 @@ public class AppNavigator {
         rootLayout.setLeft(sidebar.getRoot());
         rootLayout.setCenter(centerPane);
 
-        Scene scene = new Scene(rootLayout, 1400, 900);
+        StackPane masterPane = new StackPane();
+        masterPane.getChildren().addAll(new BackgroundVideoPane(), rootLayout);
+
+        Scene scene = new Scene(masterPane, 1400, 900);
         scene.getStylesheets().add(getClass().getResource("/dashboard.css").toExternalForm());
 
         primaryStage.setScene(scene);
@@ -75,13 +78,8 @@ public class AppNavigator {
     }
 
     private void setPageContent(Node pageNode) {
-        pageNode.setOpacity(0);
         centerPane.getChildren().setAll(pageNode);
-
-        FadeTransition fade = new FadeTransition(Duration.millis(260), pageNode);
-        fade.setFromValue(0);
-        fade.setToValue(1);
-        fade.play();
+        TransitionUtils.applySlideFadeIn(pageNode);
     }
 
     private List<AuditTrail> getAuditHistory() {

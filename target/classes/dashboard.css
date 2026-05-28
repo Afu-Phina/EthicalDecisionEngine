@@ -5,8 +5,21 @@
     -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
+.background-media-pane {
+    -fx-background-color: transparent;
+}
+
+.background-overlay {
+    -fx-background-color: rgba(9, 16, 28, 0.68);
+    -fx-effect: innershadow(two-pass-box, rgba(0, 0, 0, 0.32), 24, 0.0, 0, 0);
+}
+
 .root-pane {
-    -fx-background-color: linear-gradient(to bottom right, #121623, #162339);
+    -fx-background-color: transparent;
+}
+
+.background-layer {
+    -fx-background-color: linear-gradient(to bottom right, #08101d, #13223e);
 }
 
 .light-theme .root-pane {
@@ -49,16 +62,28 @@
     -fx-padding: 14 18;
     -fx-background-radius: 16;
     -fx-border-color: transparent;
-    -fx-transition: all 200ms ease;
+    -fx-transition: all 220ms ease;
 }
 
 .sidebar-button:hover {
     -fx-background-color: rgba(94, 208, 255, 0.14);
+    -fx-effect: dropshadow(gaussian, rgba(94, 208, 255, 0.22), 16, 0.2, 0, 0);
+}
+
+.sidebar-button:focused {
+    -fx-background-color: rgba(94, 208, 255, 0.18);
 }
 
 .sidebar-button-active {
     -fx-background-color: rgba(94, 208, 255, 0.24);
     -fx-text-fill: white;
+}
+
+.hero-welcome {
+    -fx-text-fill: #b8d8ff;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-opacity: 0.92;
 }
 
 .page-title {

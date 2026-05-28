@@ -118,13 +118,16 @@ public class DashboardPage implements AppPage {
     }
 
     private VBox createPageHeader() {
+        Label welcome = new Label("Welcome to the Ethics Intelligence Platform");
+        welcome.getStyleClass().add("hero-welcome");
+
         Label title = new Label("Ethics Intelligence Dashboard");
         title.getStyleClass().add("page-title");
 
         Label subtitle = new Label("Monitor enterprise ethics performance, emerging conflicts, and decision momentum.");
         subtitle.getStyleClass().add("page-subtitle");
 
-        VBox header = new VBox(8, title, subtitle);
+        VBox header = new VBox(10, welcome, title, subtitle);
         return header;
     }
 
