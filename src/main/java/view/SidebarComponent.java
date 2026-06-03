@@ -16,7 +16,9 @@ public class SidebarComponent {
         root = new VBox(18);
         root.getStyleClass().add("sidebar");
         root.setPadding(new Insets(28));
-        root.setPrefWidth(260);
+        root.setPrefWidth(240);
+        root.setMinWidth(220);
+        root.setMaxWidth(280);
 
         Label logoTitle = new Label("ETHICS INTEL");
         logoTitle.getStyleClass().add("sidebar-logo");
@@ -32,6 +34,14 @@ public class SidebarComponent {
             action.run();
         });
         buttons.put(title, button);
+        root.getChildren().add(button);
+    }
+
+    public void addExitItem(String title, Runnable action) {
+        Button button = new Button("⏻ " + title);
+        button.getStyleClass().addAll("sidebar-button", "sidebar-button-exit");
+        button.setMaxWidth(Double.MAX_VALUE);
+        button.setOnAction(event -> action.run());
         root.getChildren().add(button);
     }
 

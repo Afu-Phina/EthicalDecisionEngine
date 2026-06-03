@@ -7,12 +7,13 @@ import java.util.stream.Collectors;
 
 import controller.EthicalAnalysisController;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import model.AuditTrail;
 
@@ -131,18 +132,20 @@ public class DashboardPage implements AppPage {
         return header;
     }
 
-    private HBox createOverviewGrid() {
+    private FlowPane createOverviewGrid() {
         VBox totalCard = createStatCard("Completed Analyses", totalAnalysesLabel, new Label("Live operational scorecard for every reviewed decision."));
         VBox scoreCard = createStatCard("Average Ethical Score", averageScoreLabel, new Label("Performance across all frameworks."));
         VBox conflictCard = createStatCard("Latest Conflict Alert", conflictSummaryLabel, new Label("Most recent conflict detected in your analyses."));
         VBox verdictCard = createStatCard("Latest Verdict", verdictSummaryLabel, new Label("Ethical framework consensus from latest review."));
 
-        HBox row = new HBox(18, totalCard, scoreCard, conflictCard, verdictCard);
-        row.setFillHeight(true);
-        HBox.setHgrow(totalCard, Priority.ALWAYS);
-        HBox.setHgrow(scoreCard, Priority.ALWAYS);
-        HBox.setHgrow(conflictCard, Priority.ALWAYS);
-        HBox.setHgrow(verdictCard, Priority.ALWAYS);
+        FlowPane row = new FlowPane(Orientation.HORIZONTAL, 18, 18, totalCard, scoreCard, conflictCard, verdictCard);
+        row.setAlignment(Pos.TOP_LEFT);
+        row.setPrefWrapLength(1200);
+        row.setMaxWidth(Double.MAX_VALUE);
+        totalCard.setMaxWidth(360);
+        scoreCard.setMaxWidth(360);
+        conflictCard.setMaxWidth(360);
+        verdictCard.setMaxWidth(360);
         return row;
     }
 
@@ -155,31 +158,36 @@ public class DashboardPage implements AppPage {
         return card;
     }
 
-    private HBox createInsightsRow() {
+    private FlowPane createInsightsRow() {
         VBox recentBox = new VBox(14,
                 createSectionHeader("Recent Analyses"),
                 recentAnalysisSection
         );
         recentBox.getStyleClass().add("panel");
+        recentBox.setMaxWidth(520);
+        recentBox.setMinWidth(320);
 
         VBox timelineBox = new VBox(14,
                 createSectionHeader("Activity Timeline"),
                 timelineList
         );
         timelineBox.getStyleClass().add("panel");
-        timelineList.setPrefHeight(280);
+        timelineList.setPrefHeight(260);
+        timelineBox.setMaxWidth(360);
+        timelineBox.setMinWidth(280);
 
         VBox chartBox = new VBox(14,
                 createSectionHeader("Verdict Distribution"),
                 verdictPie
         );
         chartBox.getStyleClass().add("chart-card");
+        chartBox.setMaxWidth(360);
+        chartBox.setMinWidth(280);
 
-        HBox row = new HBox(18, recentBox, timelineBox, chartBox);
-        row.setFillHeight(true);
-        HBox.setHgrow(recentBox, Priority.ALWAYS);
-        HBox.setHgrow(timelineBox, Priority.ALWAYS);
-        HBox.setHgrow(chartBox, Priority.ALWAYS);
+        FlowPane row = new FlowPane(Orientation.HORIZONTAL, 18, 18, recentBox, timelineBox, chartBox);
+        row.setAlignment(Pos.TOP_LEFT);
+        row.setPrefWrapLength(1200);
+        row.setMaxWidth(Double.MAX_VALUE);
         return row;
     }
 
