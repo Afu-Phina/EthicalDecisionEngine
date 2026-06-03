@@ -40,12 +40,13 @@ public class BackgroundVideoPane extends StackPane {
         baseLayer.setMouseTransparent(true);
         getChildren().add(baseLayer);
 
-        Pane waveLayer = createWaveLayer();
+        Pane gridLayer = createTechGridLayer();
         Pane networkLayer = createNetworkLayer();
         Pane pulseLayer = createDataFlowLayer();
         Pane particleLayer = createParticleField();
+        Pane nodePulseLayer = createNodePulseLayer();
 
-        getChildren().addAll(waveLayer, networkLayer, pulseLayer, particleLayer);
+        getChildren().addAll(gridLayer, networkLayer, pulseLayer, particleLayer, nodePulseLayer);
 
         Pane overlay = new Pane();
         overlay.setMouseTransparent(true);
@@ -54,41 +55,35 @@ public class BackgroundVideoPane extends StackPane {
         overlay.prefHeightProperty().bind(heightProperty());
         getChildren().add(overlay);
 
-        backgroundAnimation = createBackgroundAnimation(waveLayer, particleLayer, pulseLayer);
+        backgroundAnimation = createBackgroundAnimation(gridLayer, particleLayer, pulseLayer);
         backgroundAnimation.play();
     }
 
-    private Pane createWaveLayer() {
-        Pane wavePane = new Pane();
-        wavePane.setMouseTransparent(true);
-        wavePane.prefWidthProperty().bind(widthProperty());
-        wavePane.prefHeightProperty().bind(heightProperty());
+    private Pane createTechGridLayer() {
+        Pane gridPane = new Pane();
+        gridPane.setMouseTransparent(true);
+        gridPane.prefWidthProperty().bind(widthProperty());
+        gridPane.prefHeightProperty().bind(heightProperty());
 
-        Rectangle wave = new Rectangle();
-        wave.widthProperty().bind(widthProperty());
-        wave.heightProperty().bind(heightProperty());
-        wave.setFill(new LinearGradient(
-                0, 0, 1, 0, true, CycleMethod.NO_CYCLE,
-                new Stop(0, Color.web("#041224", 0.00)),
-                new Stop(0.18, Color.web("#0c2a55", 0.08)),
-                new Stop(0.44, Color.web("#0d315f", 0.14)),
-                new Stop(0.68, Color.web("#060b1a", 0.16)),
-                new Stop(1, Color.web("#041225", 0.00))
-        ));
-        wave.setMouseTransparent(true);
-        wavePane.getChildren().add(wave);
+        for (int index = 1; index <= 12; index++) {
+            double y = index * 76;
+            Line line = new Line(0, y, 1600, y);
+            line.setStroke(Color.web("#38BDF8", 0.04));
+            line.setStrokeWidth(1);
+            line.setMouseTransparent(true);
+            gridPane.getChildren().add(line);
+        }
 
-        Circle pulse = new Circle(1420, 180, 178, Color.web("#22d3ee", 0.06));
-        pulse.setEffect(new BoxBlur(36, 36, 3));
-        pulse.setMouseTransparent(true);
-        wavePane.getChildren().add(pulse);
+        for (int index = 1; index <= 18; index++) {
+            double x = index * 88;
+            Line line = new Line(x, 0, x, 920);
+            line.setStroke(Color.web("#a855f7", 0.03));
+            line.setStrokeWidth(1);
+            line.setMouseTransparent(true);
+            gridPane.getChildren().add(line);
+        }
 
-        Circle pulse2 = new Circle(240, 160, 148, Color.web("#a78bfa", 0.04));
-        pulse2.setEffect(new BoxBlur(28, 28, 2));
-        pulse2.setMouseTransparent(true);
-        wavePane.getChildren().add(pulse2);
-
-        return wavePane;
+        return gridPane;
     }
 
     private Pane createNetworkLayer() {
@@ -148,8 +143,8 @@ public class BackgroundVideoPane extends StackPane {
         flowPane.prefHeightProperty().bind(heightProperty());
 
         Path flow = new Path();
-        flow.setStroke(Color.web("#7dd3fc", 0.16));
-        flow.setStrokeWidth(1.6);
+        flow.setStroke(Color.web("#7dd3fc", 0.18));
+        flow.setStrokeWidth(1.8);
         flow.setStrokeLineCap(StrokeLineCap.ROUND);
         flow.getStrokeDashArray().addAll(10.0, 12.0);
         flow.setFill(Color.TRANSPARENT);
@@ -160,8 +155,8 @@ public class BackgroundVideoPane extends StackPane {
         );
 
         Path flow2 = new Path();
-        flow2.setStroke(Color.web("#c084fc", 0.12));
-        flow2.setStrokeWidth(1.4);
+        flow2.setStroke(Color.web("#c084fc", 0.14));
+        flow2.setStrokeWidth(1.6);
         flow2.getStrokeDashArray().addAll(8.0, 10.0);
         flow2.setStrokeLineCap(StrokeLineCap.ROUND);
         flow2.setFill(Color.TRANSPARENT);
@@ -173,6 +168,29 @@ public class BackgroundVideoPane extends StackPane {
 
         flowPane.getChildren().addAll(flow, flow2);
         return flowPane;
+    }
+
+    private Pane createNodePulseLayer() {
+        Pane pulsePane = new Pane();
+        pulsePane.setMouseTransparent(true);
+        pulsePane.prefWidthProperty().bind(widthProperty());
+        pulsePane.prefHeightProperty().bind(heightProperty());
+
+        Circle beacon1 = createGlowingNode(240, 180, 32, Color.web("#38bdf8", 0.08));
+        Circle beacon2 = createGlowingNode(980, 140, 42, Color.web("#a855f7", 0.06));
+        Circle beacon3 = createGlowingNode(1180, 520, 52, Color.web("#7dd3fc", 0.06));
+        Circle beacon4 = createGlowingNode(520, 540, 36, Color.web("#8b5cf6", 0.07));
+
+        pulsePane.getChildren().addAll(beacon1, beacon2, beacon3, beacon4);
+        return pulsePane;
+    }
+
+    private Circle createGlowingNode(double x, double y, double radius, Color color) {
+        Circle node = new Circle(x, y, radius, color);
+        node.setMouseTransparent(true);
+        node.setEffect(new BoxBlur(20, 20, 3));
+        node.setOpacity(0.68);
+        return node;
     }
 
     private Pane createParticleField() {
@@ -198,13 +216,13 @@ public class BackgroundVideoPane extends StackPane {
         return particle;
     }
 
-    private ParallelTransition createBackgroundAnimation(Pane waveLayer, Pane particleLayer, Pane pulseLayer) {
-        TranslateTransition waveMove = new TranslateTransition(Duration.seconds(34), waveLayer);
-        waveMove.setFromX(-160);
-        waveMove.setToX(160);
-        waveMove.setAutoReverse(true);
-        waveMove.setCycleCount(Animation.INDEFINITE);
-        waveMove.setInterpolator(Interpolator.EASE_BOTH);
+    private ParallelTransition createBackgroundAnimation(Pane gridLayer, Pane particleLayer, Pane pulseLayer) {
+        TranslateTransition gridMove = new TranslateTransition(Duration.seconds(48), gridLayer);
+        gridMove.setFromX(-90);
+        gridMove.setToX(90);
+        gridMove.setAutoReverse(true);
+        gridMove.setCycleCount(Animation.INDEFINITE);
+        gridMove.setInterpolator(Interpolator.EASE_BOTH);
 
         TranslateTransition particleMove1 = createParticleTransition(particleLayer.getChildren().get(0), 24, 12, 18);
         TranslateTransition particleMove2 = createParticleTransition(particleLayer.getChildren().get(1), -28, 16, 22);
@@ -213,8 +231,16 @@ public class BackgroundVideoPane extends StackPane {
         TranslateTransition particleMove5 = createParticleTransition(particleLayer.getChildren().get(4), 18, -12, 26);
         TranslateTransition particleMove6 = createParticleTransition(particleLayer.getChildren().get(5), -22, 18, 30);
 
+        TranslateTransition pulseMove = new TranslateTransition(Duration.seconds(60), pulseLayer);
+        pulseMove.setFromY(-20);
+        pulseMove.setToY(20);
+        pulseMove.setAutoReverse(true);
+        pulseMove.setCycleCount(Animation.INDEFINITE);
+        pulseMove.setInterpolator(Interpolator.EASE_BOTH);
+
         ParallelTransition parallel = new ParallelTransition(
-                waveMove,
+                gridMove,
+                pulseMove,
                 particleMove1,
                 particleMove2,
                 particleMove3,

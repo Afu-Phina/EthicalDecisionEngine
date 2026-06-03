@@ -6,6 +6,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import controller.EthicalAnalysisController;
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -15,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import model.AuditTrail;
 
 public class DashboardPage implements AppPage {
@@ -155,7 +159,25 @@ public class DashboardPage implements AppPage {
 
         VBox card = new VBox(10, title, valueLabel, descriptionLabel);
         card.getStyleClass().add("dashboard-card");
+        addCardMotion(card, 6, 6.8);
+        card.setOnMouseEntered(event -> {
+            card.setScaleX(1.01);
+            card.setScaleY(1.01);
+        });
+        card.setOnMouseExited(event -> {
+            card.setScaleX(1.0);
+            card.setScaleY(1.0);
+        });
         return card;
+    }
+
+    private void addCardMotion(Node card, double distance, double durationSeconds) {
+        TranslateTransition floatTransition = new TranslateTransition(Duration.seconds(durationSeconds), card);
+        floatTransition.setByY(distance);
+        floatTransition.setAutoReverse(true);
+        floatTransition.setCycleCount(Animation.INDEFINITE);
+        floatTransition.setInterpolator(Interpolator.EASE_BOTH);
+        floatTransition.play();
     }
 
     private FlowPane createInsightsRow() {
