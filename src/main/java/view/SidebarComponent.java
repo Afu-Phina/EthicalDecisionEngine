@@ -35,6 +35,14 @@ public class SidebarComponent {
         root.getChildren().add(button);
     }
 
+    public void addExitItem(String title, Runnable action) {
+        Button button = new Button("⏻ " + title);
+        button.getStyleClass().addAll("sidebar-button", "sidebar-button-exit");
+        button.setMaxWidth(Double.MAX_VALUE);
+        button.setOnAction(event -> action.run());
+        root.getChildren().add(button);
+    }
+
     public void setActive(String title) {
         buttons.forEach((name, button) -> {
             button.getStyleClass().remove("sidebar-button-active");

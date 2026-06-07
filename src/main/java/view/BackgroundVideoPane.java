@@ -1,32 +1,28 @@
 package view;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.geometry.Insets;
-import javafx.scene.CacheHint;
+import javafx.animation.Interpolator;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaException;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.util.Duration;
 
 public class BackgroundVideoPane extends StackPane {
-    private static final String VIDEO_PATH = "/visuals/dashboard-background.mp4";
-    private final MediaPlayer mediaPlayer;
+    private final ParallelTransition backgroundAnimation;
 
     public BackgroundVideoPane() {
         getStyleClass().add("background-media-pane");
@@ -36,99 +32,239 @@ public class BackgroundVideoPane extends StackPane {
         baseLayer.widthProperty().bind(widthProperty());
         baseLayer.heightProperty().bind(heightProperty());
         baseLayer.setFill(new LinearGradient(
-                0, 0, 1, 1, true, null,
-                new Stop(0, Color.web("#07101f")),
-                new Stop(1, Color.web("#081627"))
+                0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
+                new Stop(0, Color.web("#050812")),
+                new Stop(0.38, Color.web("#071227")),
+                new Stop(1, Color.web("#02050d"))
         ));
-
+        baseLayer.setMouseTransparent(true);
         getChildren().add(baseLayer);
 
-        MediaPlayer player = null;
-        URL videoUrl = getClass().getResource(VIDEO_PATH);
-        if (videoUrl != null) {
-            try {
-                Media media = new Media(videoUrl.toExternalForm());
-                player = new MediaPlayer(media);
-                MediaView mediaView = new MediaView(player);
-                mediaView.setPreserveRatio(false);
-                mediaView.fitWidthProperty().bind(widthProperty());
-                mediaView.fitHeightProperty().bind(heightProperty());
-                mediaView.setOpacity(0.28);
-                mediaView.setSmooth(true);
-                mediaView.setCache(true);
-                mediaView.setCacheHint(CacheHint.SPEED);
-                getChildren().add(0, mediaView);
-                player.setCycleCount(MediaPlayer.INDEFINITE);
-                player.setMute(true);
-                player.setAutoPlay(true);
-            } catch (MediaException exception) {
-                System.err.println("Failed to load background video: " + exception.getMessage());
-                player = null;
-            }
-        }
+        Pane gridLayer = createTechGridLayer();
+        Pane networkLayer = createNetworkLayer();
+        Pane pulseLayer = createDataFlowLayer();
+        Pane particleLayer = createParticleField();
+        Pane nodePulseLayer = createNodePulseLayer();
 
-        if (player == null) {
-            getChildren().add(createFallbackAnimation());
-        }
+        getChildren().addAll(gridLayer, networkLayer, pulseLayer, particleLayer, nodePulseLayer);
 
         Pane overlay = new Pane();
         overlay.setMouseTransparent(true);
         overlay.getStyleClass().add("background-overlay");
-        overlay.setPadding(new Insets(0));
         overlay.prefWidthProperty().bind(widthProperty());
         overlay.prefHeightProperty().bind(heightProperty());
         getChildren().add(overlay);
 
-        mediaPlayer = player;
+        backgroundAnimation = createBackgroundAnimation(gridLayer, particleLayer, pulseLayer);
+        backgroundAnimation.play();
     }
 
-    private Pane createFallbackAnimation() {
-        Pane particleLayer = new Pane();
-        particleLayer.setMouseTransparent(true);
-        particleLayer.prefWidthProperty().bind(widthProperty());
-        particleLayer.prefHeightProperty().bind(heightProperty());
+    private Pane createTechGridLayer() {
+        Pane gridPane = new Pane();
+        gridPane.setMouseTransparent(true);
+        gridPane.prefWidthProperty().bind(widthProperty());
+        gridPane.prefHeightProperty().bind(heightProperty());
 
-        List<Circle> nodes = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            Circle particle = new Circle(18 + Math.random() * 20, Color.web("#5ed0ff", 0.08));
-            particle.setCenterX(120 + Math.random() * 1000);
-            particle.setCenterY(80 + Math.random() * 620);
-            particle.setEffect(new BoxBlur(10, 10, 3));
-            particleLayer.getChildren().add(particle);
-            nodes.add(particle);
+        for (int index = 1; index <= 12; index++) {
+            double y = index * 76;
+            Line line = new Line(0, y, 1600, y);
+            line.setStroke(Color.web("#38BDF8", 0.04));
+            line.setStrokeWidth(1);
+            line.setMouseTransparent(true);
+            gridPane.getChildren().add(line);
         }
 
-        Timeline timeline = new Timeline();
-        for (Circle particle : nodes) {
-            double targetX = 80 + Math.random() * 1080;
-            double targetY = 60 + Math.random() * 760;
-            KeyFrame frame = new KeyFrame(Duration.seconds(18 + Math.random() * 12),
-                    new KeyValue(particle.centerXProperty(), targetX),
-                    new KeyValue(particle.centerYProperty(), targetY));
-            timeline.getKeyFrames().add(frame);
+        for (int index = 1; index <= 18; index++) {
+            double x = index * 88;
+            Line line = new Line(x, 0, x, 920);
+            line.setStroke(Color.web("#a855f7", 0.03));
+            line.setStrokeWidth(1);
+            line.setMouseTransparent(true);
+            gridPane.getChildren().add(line);
         }
-        timeline.setAutoReverse(true);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
 
-        Rectangle shimmer = new Rectangle();
-        shimmer.widthProperty().bind(widthProperty());
-        shimmer.heightProperty().bind(heightProperty());
-        shimmer.setFill(new LinearGradient(
-                0, 0, 1, 1, true, null,
-                new Stop(0, Color.rgb(255, 255, 255, 0.00)),
-                new Stop(0.5, Color.rgb(94, 208, 255, 0.04)),
-                new Stop(1, Color.rgb(255, 255, 255, 0.00))
-        ));
-        shimmer.setMouseTransparent(true);
+        return gridPane;
+    }
 
-        particleLayer.getChildren().add(shimmer);
-        return particleLayer;
+    private Pane createNetworkLayer() {
+        Pane networkPane = new Pane();
+        networkPane.setMouseTransparent(true);
+        networkPane.prefWidthProperty().bind(widthProperty());
+        networkPane.prefHeightProperty().bind(heightProperty());
+
+        double[][] points = {
+                {140, 120}, {380, 80}, {700, 140}, {980, 80}, {1180, 160},
+                {180, 420}, {420, 520}, {740, 480}, {1060, 540}, {320, 260},
+                {860, 320}, {560, 620}
+        };
+
+        int[][] connections = {
+                {0, 1}, {1, 2}, {2, 3}, {3, 4}, {0, 5}, {1, 6}, {2, 9}, {3, 10}, {4, 11}, {5, 6}, {6, 7}, {7, 8}
+        };
+
+        for (int[] link : connections) {
+            double[] from = points[link[0]];
+            double[] to = points[link[1]];
+            Line line = new Line(from[0], from[1], to[0], to[1]);
+            line.setStroke(Color.web("#38BDF8", 0.16));
+            line.setStrokeWidth(1.15);
+            line.setStrokeLineCap(StrokeLineCap.ROUND);
+            networkPane.getChildren().add(line);
+        }
+
+        for (double[] point : points) {
+            Circle halo = new Circle(point[0], point[1], 12, Color.web("#38BDF8", 0.10));
+            halo.setEffect(new BoxBlur(10, 10, 2));
+            halo.setMouseTransparent(true);
+            networkPane.getChildren().add(halo);
+
+            Circle node = new Circle(point[0], point[1], 4.2, Color.web("#38BDF8", 0.32));
+            node.setEffect(new DropShadow(10, Color.web("#38BDF8", 0.18)));
+            node.setMouseTransparent(true);
+            networkPane.getChildren().add(node);
+
+            Circle core = new Circle(point[0], point[1], 2.2, Color.web("#ffffff", 0.90));
+            core.setMouseTransparent(true);
+            networkPane.getChildren().add(core);
+        }
+
+        Circle anchor = new Circle(1140, 520, 22, Color.web("#38BDF8", 0.10));
+        anchor.setEffect(new BoxBlur(22, 22, 2));
+        anchor.setMouseTransparent(true);
+        networkPane.getChildren().add(anchor);
+
+        return networkPane;
+    }
+
+    private Pane createDataFlowLayer() {
+        Pane flowPane = new Pane();
+        flowPane.setMouseTransparent(true);
+        flowPane.prefWidthProperty().bind(widthProperty());
+        flowPane.prefHeightProperty().bind(heightProperty());
+
+        Path flow = new Path();
+        flow.setStroke(Color.web("#7dd3fc", 0.18));
+        flow.setStrokeWidth(1.8);
+        flow.setStrokeLineCap(StrokeLineCap.ROUND);
+        flow.getStrokeDashArray().addAll(10.0, 12.0);
+        flow.setFill(Color.TRANSPARENT);
+        flow.getElements().addAll(
+                new MoveTo(80, 760),
+                new CubicCurveTo(260, 620, 500, 740, 680, 620),
+                new CubicCurveTo(810, 540, 920, 720, 1120, 640)
+        );
+
+        Path flow2 = new Path();
+        flow2.setStroke(Color.web("#c084fc", 0.14));
+        flow2.setStrokeWidth(1.6);
+        flow2.getStrokeDashArray().addAll(8.0, 10.0);
+        flow2.setStrokeLineCap(StrokeLineCap.ROUND);
+        flow2.setFill(Color.TRANSPARENT);
+        flow2.getElements().addAll(
+                new MoveTo(320, 820),
+                new CubicCurveTo(420, 680, 700, 780, 860, 660),
+                new CubicCurveTo(960, 600, 1080, 740, 1280, 700)
+        );
+
+        flowPane.getChildren().addAll(flow, flow2);
+        return flowPane;
+    }
+
+    private Pane createNodePulseLayer() {
+        Pane pulsePane = new Pane();
+        pulsePane.setMouseTransparent(true);
+        pulsePane.prefWidthProperty().bind(widthProperty());
+        pulsePane.prefHeightProperty().bind(heightProperty());
+
+        Circle beacon1 = createGlowingNode(240, 180, 32, Color.web("#38bdf8", 0.08));
+        Circle beacon2 = createGlowingNode(980, 140, 42, Color.web("#a855f7", 0.06));
+        Circle beacon3 = createGlowingNode(1180, 520, 52, Color.web("#7dd3fc", 0.06));
+        Circle beacon4 = createGlowingNode(520, 540, 36, Color.web("#8b5cf6", 0.07));
+
+        pulsePane.getChildren().addAll(beacon1, beacon2, beacon3, beacon4);
+        return pulsePane;
+    }
+
+    private Circle createGlowingNode(double x, double y, double radius, Color color) {
+        Circle node = new Circle(x, y, radius, color);
+        node.setMouseTransparent(true);
+        node.setEffect(new BoxBlur(20, 20, 3));
+        node.setOpacity(0.68);
+        return node;
+    }
+
+    private Pane createParticleField() {
+        Pane particlePane = new Pane();
+        particlePane.setMouseTransparent(true);
+        particlePane.prefWidthProperty().bind(widthProperty());
+        particlePane.prefHeightProperty().bind(heightProperty());
+
+        particlePane.getChildren().add(createParticle(310, 190, 5, Color.web("#38bdf8", 0.34)));
+        particlePane.getChildren().add(createParticle(950, 130, 4, Color.web("#88f7ff", 0.28)));
+        particlePane.getChildren().add(createParticle(520, 320, 4.5, Color.web("#a855f7", 0.26)));
+        particlePane.getChildren().add(createParticle(1180, 240, 3.8, Color.web("#38bdf8", 0.28)));
+        particlePane.getChildren().add(createParticle(180, 560, 4.2, Color.web("#8b5cf6", 0.22)));
+        particlePane.getChildren().add(createParticle(760, 600, 5.4, Color.web("#22d3ee", 0.26)));
+
+        return particlePane;
+    }
+
+    private Circle createParticle(double x, double y, double radius, Color color) {
+        Circle particle = new Circle(x, y, radius, color);
+        particle.setEffect(new BoxBlur(6, 6, 2));
+        particle.setMouseTransparent(true);
+        return particle;
+    }
+
+    private ParallelTransition createBackgroundAnimation(Pane gridLayer, Pane particleLayer, Pane pulseLayer) {
+        TranslateTransition gridMove = new TranslateTransition(Duration.seconds(48), gridLayer);
+        gridMove.setFromX(-90);
+        gridMove.setToX(90);
+        gridMove.setAutoReverse(true);
+        gridMove.setCycleCount(Animation.INDEFINITE);
+        gridMove.setInterpolator(Interpolator.EASE_BOTH);
+
+        TranslateTransition particleMove1 = createParticleTransition(particleLayer.getChildren().get(0), 24, 12, 18);
+        TranslateTransition particleMove2 = createParticleTransition(particleLayer.getChildren().get(1), -28, 16, 22);
+        TranslateTransition particleMove3 = createParticleTransition(particleLayer.getChildren().get(2), 14, -18, 20);
+        TranslateTransition particleMove4 = createParticleTransition(particleLayer.getChildren().get(3), -16, 14, 24);
+        TranslateTransition particleMove5 = createParticleTransition(particleLayer.getChildren().get(4), 18, -12, 26);
+        TranslateTransition particleMove6 = createParticleTransition(particleLayer.getChildren().get(5), -22, 18, 30);
+
+        TranslateTransition pulseMove = new TranslateTransition(Duration.seconds(60), pulseLayer);
+        pulseMove.setFromY(-20);
+        pulseMove.setToY(20);
+        pulseMove.setAutoReverse(true);
+        pulseMove.setCycleCount(Animation.INDEFINITE);
+        pulseMove.setInterpolator(Interpolator.EASE_BOTH);
+
+        ParallelTransition parallel = new ParallelTransition(
+                gridMove,
+                pulseMove,
+                particleMove1,
+                particleMove2,
+                particleMove3,
+                particleMove4,
+                particleMove5,
+                particleMove6
+        );
+        parallel.setCycleCount(Animation.INDEFINITE);
+        return parallel;
+    }
+
+    private TranslateTransition createParticleTransition(javafx.scene.Node node, double x, double y, double durationSeconds) {
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(durationSeconds), node);
+        transition.setByX(x);
+        transition.setByY(y);
+        transition.setAutoReverse(true);
+        transition.setCycleCount(Animation.INDEFINITE);
+        transition.setInterpolator(Interpolator.EASE_BOTH);
+        return transition;
     }
 
     public void stop() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
+        if (backgroundAnimation != null) {
+            backgroundAnimation.stop();
         }
     }
 }

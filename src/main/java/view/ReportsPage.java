@@ -1,5 +1,13 @@
 package view;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
@@ -17,14 +25,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import model.AuditTrail;
 import model.EthicalAnalysisResult;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class ReportsPage implements AppPage {
     private final VBox root;
@@ -74,10 +74,17 @@ public class ReportsPage implements AppPage {
         exportButton.getStyleClass().add("primary-button");
         exportButton.setOnAction(event -> exportReport());
 
+        frameworkChart.setMaxWidth(Double.MAX_VALUE);
+        trendChart.setMaxWidth(Double.MAX_VALUE);
+        verdictChart.setMaxWidth(Double.MAX_VALUE);
+
         HBox chartsRow = new HBox(18, frameworkChart, trendChart);
         chartsRow.setFillHeight(true);
         HBox.setHgrow(frameworkChart, Priority.ALWAYS);
         HBox.setHgrow(trendChart, Priority.ALWAYS);
+        VBox.setVgrow(frameworkChart, Priority.ALWAYS);
+        VBox.setVgrow(trendChart, Priority.ALWAYS);
+        VBox.setVgrow(verdictChart, Priority.ALWAYS);
 
         root.getChildren().addAll(title, subtitle, insightLabel, chartsRow, verdictChart, exportButton);
 

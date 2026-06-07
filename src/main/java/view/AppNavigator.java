@@ -4,16 +4,25 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import controller.EthicalAnalysisController;
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import model.AuditTrail;
-import view.TransitionUtils;
-import view.BackgroundVideoPane;
 
 public class AppNavigator {
     private final Stage primaryStage;
@@ -23,6 +32,7 @@ public class AppNavigator {
     private final EthicalAnalysisController controller;
     private final Map<String, AppPage> pages = new LinkedHashMap<>();
     private final List<AuditTrail> auditHistory = new ArrayList<>();
+    private final BackgroundVideoPane backgroundPane;
     private boolean darkTheme = true;
 
     public AppNavigator(Stage primaryStage) {
@@ -33,15 +43,28 @@ public class AppNavigator {
         this.centerPane = new StackPane();
         this.centerPane.getStyleClass().add("page-container");
         this.sidebar = new SidebarComponent();
+        this.backgroundPane = new BackgroundVideoPane();
 
         buildPages();
         configureSidebar();
 
         rootLayout.setLeft(sidebar.getRoot());
-        rootLayout.setCenter(centerPane);
+
+        ScrollPane contentScroll = new ScrollPane(centerPane);
+        contentScroll.setFitToWidth(true);
+        contentScroll.setFitToHeight(true);
+        contentScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        contentScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        contentScroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+        rootLayout.setCenter(contentScroll);
 
         StackPane masterPane = new StackPane();
-        masterPane.getChildren().addAll(new BackgroundVideoPane(), rootLayout);
+        masterPane.getChildren().addAll(backgroundPane, rootLayout);
+        masterPane.setOpacity(0);
+
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double width = Math.min(1400, screenBounds.getWidth() - 20);
+        double height = Math.min(900, screenBounds.getHeight() - 20);
 
         Scene scene = new Scene(masterPane, 1280, 840);
         scene.getStylesheets().add(getClass().getResource("/dashboard.css").toExternalForm());
@@ -64,6 +87,7 @@ public class AppNavigator {
 
     private void configureSidebar() {
         pages.keySet().forEach(page -> sidebar.addItem(page, () -> switchToPage(page)));
+        sidebar.addExitItem("Exit", this::confirmExit);
     }
 
     private void switchToPage(String title) {
@@ -80,6 +104,42 @@ public class AppNavigator {
     private void setPageContent(Node pageNode) {
         centerPane.getChildren().setAll(pageNode);
         TransitionUtils.applySlideFadeIn(pageNode);
+    }
+
+    private void handleWindowCloseRequest(WindowEvent event) {
+        if (!showExitConfirmation()) {
+            event.consume();
+        } else {
+            performExit();
+        }
+    }
+
+    private void confirmExit() {
+        if (showExitConfirmation()) {
+            performExit();
+        }
+    }
+
+    private boolean showExitConfirmation() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit Application");
+        alert.setHeaderText("Exit Application");
+        alert.setContentText("Are you sure you want to exit the Ethical Decision Engine?");
+
+        ButtonType exitButton = new ButtonType("Exit", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(exitButton, cancelButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == exitButton;
+    }
+
+    private void performExit() {
+        if (backgroundPane != null) {
+            backgroundPane.stop();
+        }
+        Platform.exit();
+        System.exit(0);
     }
 
     private List<AuditTrail> getAuditHistory() {
@@ -105,5 +165,9 @@ public class AppNavigator {
 
     public void show() {
         primaryStage.show();
+        FadeTransition fade = new FadeTransition(Duration.millis(900), primaryStage.getScene().getRoot());
+        fade.setFromValue(0);
+        fade.setToValue(1);
+        fade.play();
     }
 }

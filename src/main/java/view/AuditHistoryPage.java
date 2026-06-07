@@ -1,5 +1,10 @@
 package view;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.function.Supplier;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,11 +23,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import model.AuditTrail;
 import report.AuditReportService;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.function.Supplier;
 
 public class AuditHistoryPage implements AppPage {
     private final VBox root;
@@ -102,19 +102,26 @@ public class AuditHistoryPage implements AppPage {
     private void initializeTableColumns() {
         TableColumn<AuditTrail, String> dateColumn = new TableColumn<>("Date");
         dateColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTimestamp().toLocalDate().toString()));
-        dateColumn.setPrefWidth(140);
+        dateColumn.setMinWidth(120);
+        dateColumn.setMaxWidth(180);
 
         TableColumn<AuditTrail, String> decisionColumn = new TableColumn<>("Decision");
         decisionColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getDecision().getDescription()));
+        decisionColumn.setMinWidth(220);
         decisionColumn.setPrefWidth(360);
+        decisionColumn.setMaxWidth(Double.MAX_VALUE);
 
         TableColumn<AuditTrail, String> verdictColumn = new TableColumn<>("Verdict");
         verdictColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getVerdict()));
+        verdictColumn.setMinWidth(120);
         verdictColumn.setPrefWidth(220);
 
         TableColumn<AuditTrail, String> scoreColumn = new TableColumn<>("Average Score");
         scoreColumn.setCellValueFactory(cell -> new SimpleStringProperty(String.format("%.1f", controllerAverageScore(cell.getValue()))));
-        scoreColumn.setPrefWidth(160);
+        scoreColumn.setMinWidth(100);
+        scoreColumn.setPrefWidth(140);
+
+        historyTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         historyTable.getColumns().addAll(dateColumn, decisionColumn, verdictColumn, scoreColumn);
     }

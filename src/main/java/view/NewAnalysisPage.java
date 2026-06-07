@@ -12,6 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -93,7 +95,7 @@ public class NewAnalysisPage implements AppPage {
         return new VBox(8, title, subtitle);
     }
 
-    private HBox createFormGrid() {
+    private GridPane createFormGrid() {
         decisionInput = createTextArea("Decision summary and required action...");
         contextInput = createTextArea("Context, environment, and background details...");
         stakeholdersInput = createTextArea("Stakeholders, beneficiaries, and affected parties...");
@@ -105,19 +107,31 @@ public class NewAnalysisPage implements AppPage {
                 createFieldGroup("Context", contextInput),
                 createFieldGroup("Stakeholders", stakeholdersInput)
         );
-        left.setPrefWidth(520);
-
         VBox right = new VBox(14,
                 createFieldGroup("Risks", risksInput),
                 createFieldGroup("Policies", policiesInput),
                 createActionRow()
         );
-        right.setPrefWidth(520);
 
-        HBox formGrid = new HBox(20, left, right);
-        formGrid.setFillHeight(true);
-        HBox.setHgrow(left, Priority.ALWAYS);
-        HBox.setHgrow(right, Priority.ALWAYS);
+        GridPane formGrid = new GridPane();
+        formGrid.setHgap(20);
+        formGrid.setVgap(20);
+        formGrid.add(left, 0, 0);
+        formGrid.add(right, 1, 0);
+        formGrid.setPrefWidth(Double.MAX_VALUE);
+
+        ColumnConstraints leftColumn = new ColumnConstraints();
+        leftColumn.setPercentWidth(50);
+        leftColumn.setHgrow(Priority.ALWAYS);
+        ColumnConstraints rightColumn = new ColumnConstraints();
+        rightColumn.setPercentWidth(50);
+        rightColumn.setHgrow(Priority.ALWAYS);
+        formGrid.getColumnConstraints().addAll(leftColumn, rightColumn);
+
+        GridPane.setHgrow(left, Priority.ALWAYS);
+        GridPane.setHgrow(right, Priority.ALWAYS);
+        left.setMaxWidth(Double.MAX_VALUE);
+        right.setMaxWidth(Double.MAX_VALUE);
         return formGrid;
     }
 
