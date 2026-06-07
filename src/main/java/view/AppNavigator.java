@@ -66,8 +66,13 @@ public class AppNavigator {
         double width = Math.min(1400, screenBounds.getWidth() - 20);
         double height = Math.min(900, screenBounds.getHeight() - 20);
 
+        String cssPath = getClass().getResource("/dashboard.css").toExternalForm();
+        System.out.println("[UI] Loading stylesheet: " + cssPath);
         Scene scene = new Scene(masterPane, 1280, 840);
-        scene.getStylesheets().add(getClass().getResource("/dashboard.css").toExternalForm());
+        scene.getStylesheets().add(cssPath);
+        if (backgroundPane != null) {
+            System.out.println("[UI] BackgroundVideoPane present: " + backgroundPane.getClass().getSimpleName());
+        }
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Ethical Decision Engine");
