@@ -55,14 +55,16 @@ public class DatabaseConnection {
      * @return The singleton DatabaseConnection instance
      */
     public static DatabaseConnection getInstance() {
-        if (instance == null) {
+        DatabaseConnection result = DatabaseConnection.instance;
+        if (result == null) {
             synchronized (DatabaseConnection.class) {
-                if (instance == null) {
-                    instance = new DatabaseConnection();
+                result = DatabaseConnection.instance;
+                if (result == null) {
+                    DatabaseConnection.instance = result = new DatabaseConnection();
                 }
             }
         }
-        return instance;
+        return result;
     }
 
     /**
@@ -86,6 +88,13 @@ public class DatabaseConnection {
             } catch (SQLException e) {
                 System.err.println("Error closing database connection: " + e.getMessage());
             }
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private static class volatile_or_acc_bridge {
+
+        public volatile_or_acc_bridge() {
         }
     }
 }
