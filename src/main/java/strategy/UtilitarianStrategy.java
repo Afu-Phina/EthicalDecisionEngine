@@ -23,9 +23,9 @@ public class UtilitarianStrategy implements EthicalStrategy {
     public EthicalAnalysisResult analyzeDecision(Decision decision) {
         // Simple implementation - in a real system, this would involve more complex analysis
         double score = calculateUtilitarianScore(decision);
-        String explanation = generateUtilitarianExplanation(decision);
-        String risks = identifyUtilitarianRisks(decision);
-        String violations = identifyUtilitarianViolations(decision);
+        String explanation = generateUtilitarianExplanation();
+        String risks = identifyUtilitarianRisks();
+        String violations = identifyUtilitarianViolations();
 
         return new EthicalAnalysisResult(getFrameworkName(), score, explanation, risks, violations);
     }
@@ -63,16 +63,16 @@ public class UtilitarianStrategy implements EthicalStrategy {
         return value == null ? "" : value.toLowerCase();
     }
 
-    private String generateUtilitarianExplanation(Decision decision) {
+    private String generateUtilitarianExplanation() {
         return "Utilitarian analysis evaluates the decision based on its ability to maximize overall happiness " +
                "and minimize suffering. The score reflects the net positive impact on all affected parties.";
     }
 
-    private String identifyUtilitarianRisks(Decision decision) {
+    private String identifyUtilitarianRisks() {
         return "Risk of overlooking minority interests if the majority benefits.";
     }
 
-    private String identifyUtilitarianViolations(Decision decision) {
+    private String identifyUtilitarianViolations() {
         return "Potential violation if the decision causes significant harm to individuals for minor collective gain.";
     }
 }

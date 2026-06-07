@@ -21,9 +21,9 @@ public class DeontologicalStrategy implements EthicalStrategy {
     @Override
     public EthicalAnalysisResult analyzeDecision(Decision decision) {
         double score = calculateDeontologicalScore(decision);
-        String explanation = generateDeontologicalExplanation(decision);
-        String risks = identifyDeontologicalRisks(decision);
-        String violations = identifyDeontologicalViolations(decision);
+        String explanation = generateDeontologicalExplanation();
+        String risks = identifyDeontologicalRisks();
+        String violations = identifyDeontologicalViolations();
 
         return new EthicalAnalysisResult(getFrameworkName(), score, explanation, risks, violations);
     }
@@ -62,16 +62,16 @@ public class DeontologicalStrategy implements EthicalStrategy {
         return value == null ? "" : value.toLowerCase();
     }
 
-    private String generateDeontologicalExplanation(Decision decision) {
+    private String generateDeontologicalExplanation() {
         return "Deontological analysis evaluates whether the decision adheres to moral rules and duties. " +
                "The score reflects compliance with ethical principles regardless of outcomes.";
     }
 
-    private String identifyDeontologicalRisks(Decision decision) {
+    private String identifyDeontologicalRisks() {
         return "Risk of rigid application that may lead to harmful consequences in exceptional situations.";
     }
 
-    private String identifyDeontologicalViolations(Decision decision) {
+    private String identifyDeontologicalViolations() {
         return "Violation if the decision breaks established moral rules or duties.";
     }
 }

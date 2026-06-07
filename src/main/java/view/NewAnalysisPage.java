@@ -1,7 +1,6 @@
 package view;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
@@ -269,9 +268,4 @@ public class NewAnalysisPage implements AppPage {
         }
     }
 
-    private void saveReportToFile(String content, File file) throws IOException {
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write(content);
-        }
-    }
 }

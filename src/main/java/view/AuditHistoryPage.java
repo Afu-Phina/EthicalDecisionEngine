@@ -24,6 +24,7 @@ import javafx.stage.Window;
 import model.AuditTrail;
 import report.AuditReportService;
 
+@SuppressWarnings({"deprecation", "unchecked"})
 public class AuditHistoryPage implements AppPage {
     private final VBox root;
     private final TableView<AuditTrail> historyTable;

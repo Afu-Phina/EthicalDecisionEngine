@@ -8,13 +8,13 @@ import java.util.List;
  * AuditTrail captures the inputs and outputs of a single ethical analysis session.
  */
 public class AuditTrail {
-    private Decision decision;
-    private List<EthicalAnalysisResult> results;
-    private String verdict;
-    private String conflictSummary;
-    private String remediation;
-    private List<String> solutionPaths;
-    private LocalDateTime timestamp;
+    private final Decision decision;
+    private final List<EthicalAnalysisResult> results;
+    private final String verdict;
+    private final String conflictSummary;
+    private final String remediation;
+    private final List<String> solutionPaths;
+    private final LocalDateTime timestamp;
 
     public AuditTrail(Decision decision,
                       List<EthicalAnalysisResult> results,

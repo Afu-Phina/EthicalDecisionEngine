@@ -21,9 +21,9 @@ public class JusticeStrategy implements EthicalStrategy {
     @Override
     public EthicalAnalysisResult analyzeDecision(Decision decision) {
         double score = calculateJusticeScore(decision);
-        String explanation = generateJusticeExplanation(decision);
-        String risks = identifyJusticeRisks(decision);
-        String violations = identifyJusticeViolations(decision);
+        String explanation = generateJusticeExplanation();
+        String risks = identifyJusticeRisks();
+        String violations = identifyJusticeViolations();
 
         return new EthicalAnalysisResult(getFrameworkName(), score, explanation, risks, violations);
     }
@@ -62,16 +62,16 @@ public class JusticeStrategy implements EthicalStrategy {
         return value == null ? "" : value.toLowerCase();
     }
 
-    private String generateJusticeExplanation(Decision decision) {
+    private String generateJusticeExplanation() {
         return "Justice analysis evaluates fairness in the distribution of benefits and burdens. " +
                "The score reflects equitable treatment of all stakeholders.";
     }
 
-    private String identifyJusticeRisks(Decision decision) {
+    private String identifyJusticeRisks() {
         return "Risk of overemphasizing equality at the expense of efficiency or merit.";
     }
 
-    private String identifyJusticeViolations(Decision decision) {
+    private String identifyJusticeViolations() {
         return "Violation if the decision creates or perpetuates unfair inequalities.";
     }
 }

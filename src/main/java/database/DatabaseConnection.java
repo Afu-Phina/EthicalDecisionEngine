@@ -23,7 +23,7 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
     // Singleton instance
-    private static DatabaseConnection instance;
+    private static volatile DatabaseConnection instance;
     private Connection connection;
 
     // Database credentials (in a real application, these should be externalized to a config file or environment variables)
@@ -45,7 +45,6 @@ public class DatabaseConnection {
             System.out.println("Database connection established successfully.");
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Failed to establish database connection: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

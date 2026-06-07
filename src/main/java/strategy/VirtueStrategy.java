@@ -21,9 +21,9 @@ public class VirtueStrategy implements EthicalStrategy {
     @Override
     public EthicalAnalysisResult analyzeDecision(Decision decision) {
         double score = calculateVirtueScore(decision);
-        String explanation = generateVirtueExplanation(decision);
-        String risks = identifyVirtueRisks(decision);
-        String violations = identifyVirtueViolations(decision);
+        String explanation = generateVirtueExplanation();
+        String risks = identifyVirtueRisks();
+        String violations = identifyVirtueViolations();
 
         return new EthicalAnalysisResult(getFrameworkName(), score, explanation, risks, violations);
     }
@@ -63,16 +63,16 @@ public class VirtueStrategy implements EthicalStrategy {
         return value == null ? "" : value.toLowerCase();
     }
 
-    private String generateVirtueExplanation(Decision decision) {
+    private String generateVirtueExplanation() {
         return "Virtue analysis evaluates the decision based on cultivation of moral character. " +
                "The score reflects alignment with virtues like compassion, courage, and wisdom.";
     }
 
-    private String identifyVirtueRisks(Decision decision) {
+    private String identifyVirtueRisks() {
         return "Risk of subjective interpretation of virtues leading to inconsistent judgments.";
     }
 
-    private String identifyVirtueViolations(Decision decision) {
+    private String identifyVirtueViolations() {
         return "Violation if the decision reflects vices rather than virtues.";
     }
 }

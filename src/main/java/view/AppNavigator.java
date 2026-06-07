@@ -9,7 +9,6 @@ import java.util.Optional;
 import controller.EthicalAnalysisController;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -18,9 +17,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import model.AuditTrail;
 
@@ -61,10 +58,6 @@ public class AppNavigator {
         StackPane masterPane = new StackPane();
         masterPane.getChildren().addAll(backgroundPane, rootLayout);
         masterPane.setOpacity(0);
-
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        double width = Math.min(1400, screenBounds.getWidth() - 20);
-        double height = Math.min(900, screenBounds.getHeight() - 20);
 
         String cssPath = getClass().getResource("/dashboard.css").toExternalForm();
         System.out.println("[UI] Loading stylesheet: " + cssPath);
@@ -109,14 +102,6 @@ public class AppNavigator {
     private void setPageContent(Node pageNode) {
         centerPane.getChildren().setAll(pageNode);
         TransitionUtils.applySlideFadeIn(pageNode);
-    }
-
-    private void handleWindowCloseRequest(WindowEvent event) {
-        if (!showExitConfirmation()) {
-            event.consume();
-        } else {
-            performExit();
-        }
     }
 
     private void confirmExit() {

@@ -36,21 +36,20 @@ public class PdfAuditReportGenerator {
     private static final Color DIALOG_BG = new DeviceRgb(17, 24, 39);
 
     public static void generateReport(AuditTrail auditTrail, String filePath) throws IOException {
-        PdfWriter writer = new PdfWriter(filePath);
-        PdfDocument pdfDoc = new PdfDocument(writer);
-        pdfDoc.setDefaultPageSize(PageSize.A4);
-        Document document = new Document(pdfDoc);
-        document.setMargins(40, 40, 50, 40);
+        try (PdfWriter writer = new PdfWriter(filePath);
+             PdfDocument pdfDoc = new PdfDocument(writer);
+             Document document = new Document(pdfDoc)) {
+            pdfDoc.setDefaultPageSize(PageSize.A4);
+            document.setMargins(40, 40, 50, 40);
 
-        addTitleSection(document, auditTrail);
-        addDecisionSummary(document, auditTrail);
-        addEthicalScoresTable(document, auditTrail);
-        addConflictAnalysis(document, auditTrail);
-        addVerdict(document, auditTrail);
-        addRecommendations(document, auditTrail);
-        addFooter(document);
-
-        document.close();
+            addTitleSection(document, auditTrail);
+            addDecisionSummary(document, auditTrail);
+            addEthicalScoresTable(document, auditTrail);
+            addConflictAnalysis(document, auditTrail);
+            addVerdict(document, auditTrail);
+            addRecommendations(document, auditTrail);
+            addFooter(document);
+        }
     }
 
     private static void addTitleSection(Document document, AuditTrail auditTrail) {

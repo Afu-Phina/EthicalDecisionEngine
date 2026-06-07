@@ -87,8 +87,6 @@ public class ReportsPage implements AppPage {
         VBox.setVgrow(verdictChart, Priority.ALWAYS);
 
         root.getChildren().addAll(title, subtitle, insightLabel, chartsRow, verdictChart, exportButton);
-
-        refresh();
     }
 
     @Override

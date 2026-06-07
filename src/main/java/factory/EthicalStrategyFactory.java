@@ -24,22 +24,16 @@ public class EthicalStrategyFactory {
      * @return An instance of the corresponding EthicalStrategy, or null if not found
      */
     public static strategy.EthicalStrategy createStrategy(String frameworkName) {
-        switch (frameworkName.toLowerCase()) {
-            case "utilitarian":
-            case "utilitarianism":
-                return new strategy.UtilitarianStrategy();
-            case "deontological":
-            case "deontology":
-                return new strategy.DeontologicalStrategy();
-            case "justice":
-            case "fairness":
-                return new strategy.JusticeStrategy();
-            case "virtue":
-                return new strategy.VirtueStrategy();
-            default:
+        return switch (frameworkName.toLowerCase()) {
+            case "utilitarian", "utilitarianism" -> new strategy.UtilitarianStrategy();
+            case "deontological", "deontology" -> new strategy.DeontologicalStrategy();
+            case "justice", "fairness" -> new strategy.JusticeStrategy();
+            case "virtue" -> new strategy.VirtueStrategy();
+            default -> {
                 System.err.println("Unknown ethical framework: " + frameworkName);
-                return null;
-        }
+                yield null;
+            }
+        };
     }
 
     /**
