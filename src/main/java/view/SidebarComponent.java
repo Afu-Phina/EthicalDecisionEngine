@@ -13,10 +13,10 @@ public class SidebarComponent {
     private final Map<String, Button> buttons = new LinkedHashMap<>();
 
     public SidebarComponent() {
-        root = new VBox(18);
+        root = new VBox(14);
         root.getStyleClass().add("sidebar");
-        root.setPadding(new Insets(28));
-        root.setPrefWidth(260);
+        root.setPadding(new Insets(18));
+        root.setPrefWidth(220);
 
         Label logoTitle = new Label("ETHICS INTEL");
         logoTitle.getStyleClass().add("sidebar-logo");

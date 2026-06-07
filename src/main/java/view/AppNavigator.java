@@ -43,13 +43,13 @@ public class AppNavigator {
         StackPane masterPane = new StackPane();
         masterPane.getChildren().addAll(new BackgroundVideoPane(), rootLayout);
 
-        Scene scene = new Scene(masterPane, 1400, 900);
+        Scene scene = new Scene(masterPane, 1280, 840);
         scene.getStylesheets().add(getClass().getResource("/dashboard.css").toExternalForm());
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Ethical Decision Engine");
-        primaryStage.setMinWidth(1200);
-        primaryStage.setMinHeight(820);
+        primaryStage.setMinWidth(1050);
+        primaryStage.setMinHeight(760);
 
         switchToPage("Dashboard");
     }
