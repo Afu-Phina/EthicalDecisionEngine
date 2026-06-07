@@ -134,6 +134,10 @@ public class PdfAuditReportGenerator {
     private static void addConflictAnalysis(Document document, AuditTrail auditTrail) {
         PdfFont headingFont = font(StandardFonts.HELVETICA_BOLD);
         PdfFont bodyFont = font(StandardFonts.HELVETICA);
+        String conflictText = auditTrail.getConflictSummary();
+        if (conflictText == null || conflictText.isBlank()) {
+            conflictText = "No conflict analysis was generated for this decision.";
+        }
 
         document.add(new Paragraph("Conflict Detection & Analysis")
                 .setFont(headingFont)
@@ -142,16 +146,20 @@ public class PdfAuditReportGenerator {
                 .setMarginTop(18)
                 .setMarginBottom(10));
 
-        document.add(new Paragraph(auditTrail.getConflictSummary())
+        document.add(new Paragraph(conflictText)
                 .setFont(bodyFont)
                 .setFontSize(11)
-                .setFontColor(ColorConstants.WHITE)
+                .setFontColor(ColorConstants.DARK_GRAY)
                 .setMarginBottom(12));
     }
 
     private static void addVerdict(Document document, AuditTrail auditTrail) {
         PdfFont headingFont = font(StandardFonts.HELVETICA_BOLD);
         PdfFont bodyFont = font(StandardFonts.HELVETICA);
+        String remediationText = auditTrail.getRemediation();
+        if (remediationText == null || remediationText.isBlank()) {
+            remediationText = "No remediation guidance was generated for this decision.";
+        }
 
         document.add(new Paragraph("Final Verdict")
                 .setFont(headingFont)
@@ -175,10 +183,10 @@ public class PdfAuditReportGenerator {
                 .setFontColor(ACCENT_BLUE)
                 .setMarginBottom(6));
 
-        document.add(new Paragraph(auditTrail.getRemediation())
+        document.add(new Paragraph(remediationText)
                 .setFont(bodyFont)
                 .setFontSize(11)
-                .setFontColor(ColorConstants.WHITE)
+                .setFontColor(ColorConstants.DARK_GRAY)
                 .setMarginBottom(12));
     }
 
@@ -198,7 +206,7 @@ public class PdfAuditReportGenerator {
             document.add(new Paragraph("No recommendations available.")
                     .setFont(bodyFont)
                     .setFontSize(11)
-                    .setFontColor(ColorConstants.WHITE));
+                    .setFontColor(ColorConstants.DARK_GRAY));
             return;
         }
 
@@ -206,7 +214,7 @@ public class PdfAuditReportGenerator {
             document.add(new Paragraph("• " + solution)
                     .setFont(bodyFont)
                     .setFontSize(11)
-                    .setFontColor(ColorConstants.WHITE)
+                    .setFontColor(ColorConstants.DARK_GRAY)
                     .setMarginLeft(12)
                     .setMarginBottom(6));
         }
