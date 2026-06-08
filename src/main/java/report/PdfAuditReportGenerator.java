@@ -28,6 +28,7 @@ import model.EthicalAnalysisResult;
  * Purpose: Generates formatted PDF reports for ethics audits with score cards,
  * verdict analysis, conflict detection, and recommendations.
  */
+// builds a polished PDF report from an audit trail using iText.
 public class PdfAuditReportGenerator {
     private static final Color ACCENT_BLUE = new DeviceRgb(59, 130, 246);
     private static final Color SUCCESS_GREEN = new DeviceRgb(34, 197, 94);
@@ -120,6 +121,7 @@ public class PdfAuditReportGenerator {
         addTableHeader(table, "Explanation", bodyFont);
         addTableHeader(table, "Key Risks", bodyFont);
 
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (EthicalAnalysisResult result : auditTrail.getResults()) {
             addTableCell(table, result.getFrameworkName(), bodyFont, DIALOG_BG);
             addTableCell(table, String.format("%.1f/10", result.getScore()), bodyFont, scoreBackground(result.getScore()));
@@ -134,6 +136,7 @@ public class PdfAuditReportGenerator {
         PdfFont headingFont = font(StandardFonts.HELVETICA_BOLD);
         PdfFont bodyFont = font(StandardFonts.HELVETICA);
         String conflictText = auditTrail.getConflictSummary();
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (conflictText == null || conflictText.isBlank()) {
             conflictText = "No conflict analysis was generated for this decision.";
         }
@@ -156,6 +159,7 @@ public class PdfAuditReportGenerator {
         PdfFont headingFont = font(StandardFonts.HELVETICA_BOLD);
         PdfFont bodyFont = font(StandardFonts.HELVETICA);
         String remediationText = auditTrail.getRemediation();
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (remediationText == null || remediationText.isBlank()) {
             remediationText = "No remediation guidance was generated for this decision.";
         }
@@ -201,6 +205,7 @@ public class PdfAuditReportGenerator {
                 .setMarginBottom(10));
 
         List<String> solutions = auditTrail.getSolutionPaths();
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (solutions == null || solutions.isEmpty()) {
             document.add(new Paragraph("No recommendations available.")
                     .setFont(bodyFont)
@@ -209,6 +214,7 @@ public class PdfAuditReportGenerator {
             return;
         }
 
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (String solution : solutions) {
             document.add(new Paragraph("• " + solution)
                     .setFont(bodyFont)
@@ -247,6 +253,7 @@ public class PdfAuditReportGenerator {
 
     private static PdfFont font(String standardFont) {
         try {
+// Return this value to the method caller so the result can be used elsewhere.
             return PdfFontFactory.createFont(standardFont);
         } catch (IOException e) {
             throw new RuntimeException("Unable to load PDF font: " + standardFont, e);
@@ -254,30 +261,43 @@ public class PdfAuditReportGenerator {
     }
 
     private static Color scoreBackground(double score) {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (score >= 8.0) {
+// Return this value to the method caller so the result can be used elsewhere.
             return SUCCESS_GREEN;
         }
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (score >= 5.0) {
+// Return this value to the method caller so the result can be used elsewhere.
             return WARNING_ORANGE;
         }
+// Return this value to the method caller so the result can be used elsewhere.
         return DANGER_RED;
     }
 
     private static Color getVerdictColor(String verdict) {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (verdict == null || verdict.isBlank()) {
+// Return this value to the method caller so the result can be used elsewhere.
             return new DeviceRgb(75, 85, 99);
         }
         String normalized = verdict.toLowerCase();
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (normalized.contains("approved") || normalized.contains("defensible") || normalized.contains("acceptable")) {
+// Return this value to the method caller so the result can be used elsewhere.
             return SUCCESS_GREEN;
         }
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (normalized.contains("conditions") || normalized.contains("caution")) {
+// Return this value to the method caller so the result can be used elsewhere.
             return WARNING_ORANGE;
         }
+// Return this value to the method caller so the result can be used elsewhere.
         return DANGER_RED;
     }
 
     private static Paragraph createSectionDivider() {
+// Return this value to the method caller so the result can be used elsewhere.
         return new Paragraph("\n").setMarginTop(6).setMarginBottom(18);
     }
 }

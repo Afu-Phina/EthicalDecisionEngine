@@ -15,6 +15,7 @@ package factory;
  * - Abstraction: Hides the complexity of object creation.
  * - Polymorphism: Returns objects that implement the same interface but have different behaviors.
  */
+// creates strategy objects for each ethical framework so the controller can use them without knowing how they are made.
 public class EthicalStrategyFactory {
 
     /**

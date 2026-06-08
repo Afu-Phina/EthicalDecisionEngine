@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
+// shows UI controls for application settings such as theme and database details.
 public class SettingsPage implements AppPage {
     private final VBox root;
     private final CheckBox themeToggle;
@@ -26,6 +27,7 @@ public class SettingsPage implements AppPage {
     private final Consumer<Boolean> themeSwitcher;
     private final Supplier<Boolean> currentThemeSupplier;
 
+// This method performs one part of the class behavior.
     public SettingsPage(Consumer<Boolean> themeSwitcher, Supplier<Boolean> currentThemeSupplier) {
         this.themeSwitcher = themeSwitcher;
         this.currentThemeSupplier = currentThemeSupplier;
@@ -77,34 +79,44 @@ public class SettingsPage implements AppPage {
     }
 
     @Override
+// This method performs one part of the class behavior.
     public Node getView() {
+// Return this value to the method caller so the result can be used elsewhere.
         return root;
     }
 
     @Override
+// This method performs one part of the class behavior.
     public String getTitle() {
+// Return this value to the method caller so the result can be used elsewhere.
         return "Settings";
     }
 
     @Override
+// updates the page contents when the user navigates to it.
     public void refresh() {
         themeToggle.setSelected(currentThemeSupplier.get());
     }
 
+// This method performs one part of the class behavior.
     private VBox createSection(String titleText, Node... children) {
         Label title = new Label(titleText);
         title.getStyleClass().add("card-title");
         VBox sectionBody = new VBox(10, children);
+// Return this value to the method caller so the result can be used elsewhere.
         return new VBox(8, title, sectionBody);
     }
 
+// This method performs one part of the class behavior.
     private TextField createTextField(String placeholder) {
         TextField field = new TextField();
         field.setPromptText(placeholder);
         field.getStyleClass().add("input-area");
+// Return this value to the method caller so the result can be used elsewhere.
         return field;
     }
 
+// This method performs one part of the class behavior.
     private void saveSettings() {
         statusLabel.setText("Settings saved. Theme changes will apply immediately.");
     }

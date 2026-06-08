@@ -21,9 +21,11 @@ import java.sql.SQLException;
  * - Encapsulation: The connection details (URL, username, password) are encapsulated within the class.
  * - Abstraction: The class abstracts the complexity of connection management from the rest of the application.
  */
+// manages a single database connection for the application using the Singleton pattern.
 public class DatabaseConnection {
     // Singleton instance
     private static volatile DatabaseConnection instance;
+// stores the database connection object used for data access.
     private Connection connection;
 
     // Database credentials (in a real application, these should be externalized to a config file or environment variables)
@@ -35,6 +37,7 @@ public class DatabaseConnection {
      * Private constructor to prevent instantiation from outside the class.
      * Initializes the database connection.
      */
+// This method performs one part of the class behavior.
     private DatabaseConnection() {
         try {
             // Load MySQL JDBC driver (optional in newer versions, but good practice)
@@ -56,14 +59,17 @@ public class DatabaseConnection {
      */
     public static DatabaseConnection getInstance() {
         DatabaseConnection result = DatabaseConnection.instance;
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (result == null) {
             synchronized (DatabaseConnection.class) {
                 result = DatabaseConnection.instance;
+// If the condition inside the parentheses is true, the code inside the block will run.
                 if (result == null) {
                     DatabaseConnection.instance = result = new DatabaseConnection();
                 }
             }
         }
+// Return this value to the method caller so the result can be used elsewhere.
         return result;
     }
 
@@ -72,7 +78,9 @@ public class DatabaseConnection {
      *
      * @return The Connection object
      */
+// returns the database connection object.
     public Connection getConnection() {
+// Return this value to the method caller so the result can be used elsewhere.
         return connection;
     }
 
@@ -80,7 +88,9 @@ public class DatabaseConnection {
      * Closes the database connection.
      * This method should be called when the application is shutting down.
      */
+// closes the database connection when the app is shutting down.
     public void closeConnection() {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (connection != null) {
             try {
                 connection.close();
@@ -94,6 +104,7 @@ public class DatabaseConnection {
     @SuppressWarnings("unused")
     private static class volatile_or_acc_bridge {
 
+// This method performs one part of the class behavior.
         public volatile_or_acc_bridge() {
         }
     }

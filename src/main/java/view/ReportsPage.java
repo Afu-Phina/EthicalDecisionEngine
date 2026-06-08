@@ -26,6 +26,7 @@ import javafx.stage.Window;
 import model.AuditTrail;
 import model.EthicalAnalysisResult;
 
+// shows charts and analytics based on past audit history.
 public class ReportsPage implements AppPage {
     private final VBox root;
     private final BarChart<String, Number> frameworkChart;
@@ -34,6 +35,7 @@ public class ReportsPage implements AppPage {
     private final Label insightLabel;
     private final Supplier<List<AuditTrail>> historySupplier;
 
+// This method performs one part of the class behavior.
     public ReportsPage(Supplier<List<AuditTrail>> historySupplier) {
         this.historySupplier = historySupplier;
         this.root = new VBox(22);
@@ -90,18 +92,24 @@ public class ReportsPage implements AppPage {
     }
 
     @Override
+// This method performs one part of the class behavior.
     public Node getView() {
+// Return this value to the method caller so the result can be used elsewhere.
         return root;
     }
 
     @Override
+// This method performs one part of the class behavior.
     public String getTitle() {
+// Return this value to the method caller so the result can be used elsewhere.
         return "Reports";
     }
 
     @Override
+// updates the page contents when the user navigates to it.
     public void refresh() {
         List<AuditTrail> history = historySupplier.get();
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (history.isEmpty()) {
             insightLabel.setText("No audit history yet. Run an analysis to populate analytics.");
             frameworkChart.getData().clear();
@@ -116,6 +124,7 @@ public class ReportsPage implements AppPage {
         updateVerdictChart(history);
     }
 
+// This method performs one part of the class behavior.
     private void updateFrameworkChart(List<AuditTrail> history) {
         frameworkChart.getData().clear();
         Map<String, Double> averageByFramework = history.stream()
@@ -129,9 +138,11 @@ public class ReportsPage implements AppPage {
         frameworkChart.getData().add(series);
     }
 
+// This method performs one part of the class behavior.
     private void updateTrendChart(List<AuditTrail> history) {
         trendChart.getData().clear();
         XYChart.Series<Number, Number> scoreSeries = new XYChart.Series<>();
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (int index = history.size() - 1; index >= 0; index--) {
             AuditTrail audit = history.get(index);
             double average = audit.getResults().stream().mapToDouble(EthicalAnalysisResult::getScore).average().orElse(0.0);
@@ -140,6 +151,7 @@ public class ReportsPage implements AppPage {
         trendChart.getData().add(scoreSeries);
     }
 
+// This method performs one part of the class behavior.
     private void updateVerdictChart(List<AuditTrail> history) {
         verdictChart.getData().clear();
         Map<String, Long> counts = history.stream()
@@ -149,6 +161,7 @@ public class ReportsPage implements AppPage {
                 verdictChart.getData().add(new PieChart.Data(verdict, count)));
     }
 
+// This method performs one part of the class behavior.
     private void exportReport() {
         Window owner = root.getScene() == null ? null : root.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
@@ -157,6 +170,7 @@ public class ReportsPage implements AppPage {
         fileChooser.setInitialFileName("ethical-report-summary.txt");
 
         File file = fileChooser.showSaveDialog(owner);
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (file == null) {
             return;
         }
@@ -169,6 +183,7 @@ public class ReportsPage implements AppPage {
         }
     }
 
+// This method performs one part of the class behavior.
     private String buildReportSummary(List<AuditTrail> history) {
         StringBuilder builder = new StringBuilder();
         builder.append("ETHICS ANALYTICS SUMMARY\n");
@@ -185,12 +200,14 @@ public class ReportsPage implements AppPage {
                 .append("\n"));
 
         builder.append("\nTrend details:\n");
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (int i = 0; i < history.size(); i++) {
             AuditTrail audit = history.get(i);
             builder.append(String.format("%d: %s — %.1f\n", i + 1,
                     audit.getTimestamp().toLocalDate(),
                     audit.getResults().stream().mapToDouble(EthicalAnalysisResult::getScore).average().orElse(0.0)));
         }
+// Return this value to the method caller so the result can be used elsewhere.
         return builder.toString();
     }
 }

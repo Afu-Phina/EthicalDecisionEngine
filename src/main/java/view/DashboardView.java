@@ -27,48 +27,77 @@ import model.EthicalAnalysisResult;
 /**
  * DashboardView class represents the main dashboard of the Ethical Decision Engine.
  */
+// contains an alternate dashboard-style interface for running and viewing analysis results.
 public class DashboardView {
     private final Stage primaryStage;
+// stores the main layout container for the window.
     private BorderPane rootLayout;
+// This field stores data that the class uses.
     private TextArea decisionInput;
+// This field stores data that the class uses.
     private TextArea contextInput;
+// This field stores data that the class uses.
     private TextArea stakeholdersInput;
+// This field stores data that the class uses.
     private TextArea risksInput;
+// This field stores data that the class uses.
     private TextArea policiesInput;
+// This field stores data that the class uses.
     private Label analysisStatusLabel;
 
+// This field stores data that the class uses.
     private VBox utilCard;
+// This field stores data that the class uses.
     private Label utilScoreLabel;
+// This field stores data that the class uses.
     private Label utilSummaryLabel;
 
+// This field stores data that the class uses.
     private VBox justiceCard;
+// This field stores data that the class uses.
     private Label justiceScoreLabel;
+// This field stores data that the class uses.
     private Label justiceSummaryLabel;
 
+// This field stores data that the class uses.
     private VBox deontCard;
+// This field stores data that the class uses.
     private Label deontScoreLabel;
+// This field stores data that the class uses.
     private Label deontSummaryLabel;
 
+// This field stores data that the class uses.
     private VBox virtueCard;
+// This field stores data that the class uses.
     private Label virtueScoreLabel;
+// This field stores data that the class uses.
     private Label virtueSummaryLabel;
 
+// This field stores data that the class uses.
     private Label conflictLabel;
+// This field stores data that the class uses.
     private Label verdictLabel;
+// This field stores data that the class uses.
     private Label improvementsLabel;
+// This field stores data that the class uses.
     private VBox mitigationList;
+// This field stores data that the class uses.
     private VBox alternativeList;
 
     private final EthicalAnalysisController controller;
+// stores the decision object that was analyzed.
     private Decision lastDecision;
+// stores the list of ethical framework results for one decision.
     private List<EthicalAnalysisResult> lastResults;
 
+// This method performs one part of the class behavior.
     public DashboardView(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.controller = new EthicalAnalysisController();
         initializeUI();
     }
 
+// This method performs one part of the class behavior.
     private void initializeUI() {
         rootLayout = new BorderPane();
         rootLayout.getStyleClass().add("root-pane");
@@ -85,6 +114,7 @@ public class DashboardView {
         primaryStage.setMinHeight(820);
     }
 
+// This method performs one part of the class behavior.
     private VBox createSidebar() {
         Label logoTitle = new Label("ETHICS HUB");
         logoTitle.getStyleClass().add("sidebar-logo");
@@ -100,15 +130,19 @@ public class DashboardView {
         sidebarBox.setPadding(new Insets(28));
         sidebarBox.setPrefWidth(240);
 
+// Return this value to the method caller so the result can be used elsewhere.
         return sidebarBox;
     }
 
+// This method performs one part of the class behavior.
     private Button createSidebarButton(String text) {
         Button button = new Button(text);
         button.getStyleClass().add("sidebar-button");
+// Return this value to the method caller so the result can be used elsewhere.
         return button;
     }
 
+// This method performs one part of the class behavior.
     private ScrollPane createMainContent() {
         VBox contentWrapper = new VBox(24);
         contentWrapper.setPadding(new Insets(28));
@@ -123,9 +157,11 @@ public class DashboardView {
         scrollPane.setFitToHeight(true);
         scrollPane.getStyleClass().add("content-scroll");
 
+// Return this value to the method caller so the result can be used elsewhere.
         return scrollPane;
     }
 
+// This method performs one part of the class behavior.
     private VBox createPageHeader() {
         Label pageTitle = new Label("Ethical Analysis Platform");
         pageTitle.getStyleClass().add("page-title");
@@ -138,9 +174,11 @@ public class DashboardView {
         VBox headerBox = new VBox(headerText);
         headerBox.getStyleClass().add("page-header");
 
+// Return this value to the method caller so the result can be used elsewhere.
         return headerBox;
     }
 
+// This method performs one part of the class behavior.
     private HBox createBodyContent() {
         VBox leftPane = createAnalysisPanel();
         VBox rightPane = createResultsPanel();
@@ -150,9 +188,11 @@ public class DashboardView {
         HBox.setHgrow(rightPane, Priority.ALWAYS);
         HBox.setHgrow(leftPane, Priority.SOMETIMES);
 
+// Return this value to the method caller so the result can be used elsewhere.
         return body;
     }
 
+// This method performs one part of the class behavior.
     private VBox createAnalysisPanel() {
         Label panelTitle = new Label("New Ethical Analysis");
         panelTitle.getStyleClass().add("panel-title");
@@ -209,18 +249,22 @@ public class DashboardView {
         analysisBox.getStyleClass().add("panel");
         analysisBox.setPrefWidth(520);
 
+// Return this value to the method caller so the result can be used elsewhere.
         return analysisBox;
     }
 
+// This method performs one part of the class behavior.
     private VBox createFieldGroup(String labelText, Control field) {
         Label label = new Label(labelText);
         label.getStyleClass().add("field-label");
 
         VBox group = new VBox(10, label, field);
         group.getStyleClass().add("field-group");
+// Return this value to the method caller so the result can be used elsewhere.
         return group;
     }
 
+// This method performs one part of the class behavior.
     private VBox createResultsPanel() {
         utilScoreLabel = new Label("0.0/10");
         utilScoreLabel.getStyleClass().add("score-value");
@@ -284,9 +328,11 @@ public class DashboardView {
         resultsPane.setMaxWidth(Double.MAX_VALUE);
         resultsPane.getStyleClass().add("panel");
 
+// Return this value to the method caller so the result can be used elsewhere.
         return resultsPane;
     }
 
+// This method performs one part of the class behavior.
     private VBox createScoreCard(String title, Label scoreLabel, Label summaryLabel) {
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add("card-title");
@@ -294,30 +340,38 @@ public class DashboardView {
         VBox card = new VBox(14, titleLabel, scoreLabel, summaryLabel);
         card.getStyleClass().addAll("score-card", "score-medium");
         card.setPrefWidth(260);
+// Return this value to the method caller so the result can be used elsewhere.
         return card;
     }
 
+// This method performs one part of the class behavior.
     private VBox createDashboardCard(String title, Node content) {
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add("card-title");
 
         VBox card = new VBox(14, titleLabel, content);
         card.getStyleClass().add("dashboard-card");
+// Return this value to the method caller so the result can be used elsewhere.
         return card;
     }
 
+// This method performs one part of the class behavior.
     private Label createSectionLabel(String text) {
         Label label = new Label(text);
         label.getStyleClass().add("section-label");
+// Return this value to the method caller so the result can be used elsewhere.
         return label;
     }
 
+// This method performs one part of the class behavior.
     private Label createSectionHeader(String text) {
         Label label = new Label(text);
         label.getStyleClass().add("section-header");
+// Return this value to the method caller so the result can be used elsewhere.
         return label;
     }
 
+// runs the ethical analysis for each framework on a given decision.
     private void analyzeDecision() {
         String decisionText = decisionInput.getText().trim();
         String context = contextInput.getText().trim();
@@ -325,6 +379,7 @@ public class DashboardView {
         String risks = risksInput.getText().trim();
         String policies = policiesInput.getText().trim();
 
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (decisionText.isEmpty()) {
             analysisStatusLabel.setText("Please enter a decision description.");
             return;
@@ -338,6 +393,7 @@ public class DashboardView {
         analysisStatusLabel.setText("Analysis completed successfully.");
     }
 
+// This method performs one part of the class behavior.
     private void updateResultDashboard(List<EthicalAnalysisResult> results) {
         utilScoreLabel.setText("0.0/10");
         justiceScoreLabel.setText("0.0/10");
@@ -349,8 +405,10 @@ public class DashboardView {
         deontSummaryLabel.setText("Awaiting analysis...");
         virtueSummaryLabel.setText("Awaiting analysis...");
 
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (EthicalAnalysisResult result : results) {
             String name = result.getFrameworkName().toLowerCase();
+// If the condition inside the parentheses is true, the code inside the block will run.
             if (name.contains("utilitarian")) {
                 updateScoreCard(utilCard, utilScoreLabel, utilSummaryLabel, result);
             } else if (name.contains("justice")) {
@@ -370,6 +428,7 @@ public class DashboardView {
         updateBulletList(alternativeList, controller.generateAlternativeApproaches(results));
     }
 
+// This method performs one part of the class behavior.
     private void updateScoreCard(VBox card, Label scoreLabel, Label summaryLabel, EthicalAnalysisResult result) {
         double score = result.getScore();
         scoreLabel.setText(String.format("%.1f/10", score));
@@ -378,21 +437,29 @@ public class DashboardView {
         card.getStyleClass().add(getScoreClass(score));
     }
 
+// This method performs one part of the class behavior.
     private String getScoreClass(double score) {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (score >= 8.0) {
+// Return this value to the method caller so the result can be used elsewhere.
             return "score-high";
         } else if (score >= 5.0) {
+// Return this value to the method caller so the result can be used elsewhere.
             return "score-medium";
         }
+// Return this value to the method caller so the result can be used elsewhere.
         return "score-low";
     }
 
+// This method performs one part of the class behavior.
     private void updateBulletList(VBox container, List<String> items) {
         container.getChildren().clear();
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (items.isEmpty()) {
             container.getChildren().add(new Label("No recommendations available."));
             return;
         }
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (String item : items) {
             Label bullet = new Label("- " + item);
             bullet.getStyleClass().add("bullet-item");
@@ -401,7 +468,9 @@ public class DashboardView {
         }
     }
 
+// This method performs one part of the class behavior.
     private void exportAuditTrail() {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (lastDecision == null || lastResults == null || lastResults.isEmpty()) {
             analysisStatusLabel.setText("Run an analysis first before exporting an audit trail.");
             return;
@@ -413,6 +482,7 @@ public class DashboardView {
         fileChooser.setInitialFileName("ethical-audit-trail.txt");
 
         File file = fileChooser.showSaveDialog(primaryStage);
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (file == null) {
             return;
         }
@@ -432,6 +502,7 @@ public class DashboardView {
         }
     }
 
+// shows the current page or application window.
     public void show() {
         primaryStage.show();
     }

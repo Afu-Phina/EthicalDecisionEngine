@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * AuditTrail captures the inputs and outputs of a single ethical analysis session.
  */
+// stores the complete history of one completed ethical analysis session.
 public class AuditTrail {
     private final Decision decision;
     private final List<EthicalAnalysisResult> results;
@@ -31,34 +32,49 @@ public class AuditTrail {
         this.timestamp = LocalDateTime.now();
     }
 
+// This method performs one part of the class behavior.
     public Decision getDecision() {
+// Return this value to the method caller so the result can be used elsewhere.
         return decision;
     }
 
+// This method performs one part of the class behavior.
     public List<EthicalAnalysisResult> getResults() {
+// Return this value to the method caller so the result can be used elsewhere.
         return results;
     }
 
+// This method performs one part of the class behavior.
     public String getVerdict() {
+// Return this value to the method caller so the result can be used elsewhere.
         return verdict;
     }
 
+// This method performs one part of the class behavior.
     public String getConflictSummary() {
+// Return this value to the method caller so the result can be used elsewhere.
         return conflictSummary;
     }
 
+// This method performs one part of the class behavior.
     public String getRemediation() {
+// Return this value to the method caller so the result can be used elsewhere.
         return remediation;
     }
 
+// This method performs one part of the class behavior.
     public List<String> getSolutionPaths() {
+// Return this value to the method caller so the result can be used elsewhere.
         return solutionPaths;
     }
 
+// This method performs one part of the class behavior.
     public LocalDateTime getTimestamp() {
+// Return this value to the method caller so the result can be used elsewhere.
         return timestamp;
     }
 
+// builds a plain text report from the audit trail data.
     public String toTextReport() {
         StringBuilder sb = new StringBuilder();
         String timeLabel = timestamp.format(DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss"));
@@ -82,6 +98,7 @@ public class AuditTrail {
         sb.append(decision.getApplicablePolicies()).append("\n\n");
 
         sb.append("FRAMEWORK SCORES:\n");
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (EthicalAnalysisResult result : results) {
             sb.append(String.format("- %s: %.1f/10\n", result.getFrameworkName(), result.getScore()));
             sb.append("  Explanation: ").append(result.getExplanation()).append("\n");
@@ -99,10 +116,12 @@ public class AuditTrail {
         sb.append(remediation).append("\n\n");
 
         sb.append("SOLUTION PATHS:\n");
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (String path : solutionPaths) {
             sb.append("- ").append(path).append("\n");
         }
 
+// Return this value to the method caller so the result can be used elsewhere.
         return sb.toString();
     }
 }

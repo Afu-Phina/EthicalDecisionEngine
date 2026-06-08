@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import model.AuditTrail;
 
+// shows summary statistics, recent analyses, and high level insights to the user.
 public class DashboardPage implements AppPage {
     private final VBox root;
     private final Label totalAnalysesLabel;
@@ -33,6 +34,7 @@ public class DashboardPage implements AppPage {
     private final Supplier<List<AuditTrail>> auditHistorySupplier;
     private final EthicalAnalysisController controller;
 
+// This method performs one part of the class behavior.
     public DashboardPage(EthicalAnalysisController controller, Supplier<List<AuditTrail>> auditHistorySupplier) {
         this.controller = controller;
         this.auditHistorySupplier = auditHistorySupplier;
@@ -73,20 +75,26 @@ public class DashboardPage implements AppPage {
     }
 
     @Override
+// This method performs one part of the class behavior.
     public Node getView() {
+// Return this value to the method caller so the result can be used elsewhere.
         return root;
     }
 
     @Override
+// This method performs one part of the class behavior.
     public String getTitle() {
+// Return this value to the method caller so the result can be used elsewhere.
         return "Dashboard";
     }
 
     @Override
+// updates the page contents when the user navigates to it.
     public void refresh() {
         List<AuditTrail> history = auditHistorySupplier.get();
         totalAnalysesLabel.setText(String.valueOf(history.size()));
 
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (history.isEmpty()) {
             averageScoreLabel.setText("0.0");
             conflictSummaryLabel.setText("Run a new analysis to populate conflict insights.");
@@ -122,6 +130,7 @@ public class DashboardPage implements AppPage {
         verdictPie.setData(buildVerdictDistribution(history));
     }
 
+// This method performs one part of the class behavior.
     private VBox createPageHeader() {
         Label welcome = new Label("Welcome to the Ethics Intelligence Platform");
         welcome.getStyleClass().add("hero-welcome");
@@ -133,9 +142,11 @@ public class DashboardPage implements AppPage {
         subtitle.getStyleClass().add("page-subtitle");
 
         VBox header = new VBox(10, welcome, title, subtitle);
+// Return this value to the method caller so the result can be used elsewhere.
         return header;
     }
 
+// This method performs one part of the class behavior.
     private FlowPane createOverviewGrid() {
         VBox totalCard = createStatCard("Completed Analyses", totalAnalysesLabel, new Label("Live operational scorecard for every reviewed decision."));
         VBox scoreCard = createStatCard("Average Ethical Score", averageScoreLabel, new Label("Performance across all frameworks."));
@@ -150,9 +161,11 @@ public class DashboardPage implements AppPage {
         scoreCard.setMaxWidth(360);
         conflictCard.setMaxWidth(360);
         verdictCard.setMaxWidth(360);
+// Return this value to the method caller so the result can be used elsewhere.
         return row;
     }
 
+// This method performs one part of the class behavior.
     private VBox createStatCard(String labelText, Label valueLabel, Label descriptionLabel) {
         Label title = new Label(labelText);
         title.getStyleClass().add("card-title");
@@ -168,9 +181,11 @@ public class DashboardPage implements AppPage {
             card.setScaleX(1.0);
             card.setScaleY(1.0);
         });
+// Return this value to the method caller so the result can be used elsewhere.
         return card;
     }
 
+// This method performs one part of the class behavior.
     private void addCardMotion(Node card, double distance, double durationSeconds) {
         TranslateTransition floatTransition = new TranslateTransition(Duration.seconds(durationSeconds), card);
         floatTransition.setByY(distance);
@@ -180,6 +195,7 @@ public class DashboardPage implements AppPage {
         floatTransition.play();
     }
 
+// This method performs one part of the class behavior.
     private FlowPane createInsightsRow() {
         VBox recentBox = new VBox(14,
                 createSectionHeader("Recent Analyses"),
@@ -210,14 +226,19 @@ public class DashboardPage implements AppPage {
         row.setAlignment(Pos.TOP_LEFT);
         row.setPrefWrapLength(1200);
         row.setMaxWidth(Double.MAX_VALUE);
+// Return this value to the method caller so the result can be used elsewhere.
         return row;
     }
 
+// This method performs one part of the class behavior.
     private String formatTimelineEntry(AuditTrail trail) {
+// Return this value to the method caller so the result can be used elsewhere.
         return String.format("%s — %s — %s", trail.getTimestamp().toLocalDate(), trail.getVerdict(), trail.getDecision().getDescription());
     }
 
+// This method performs one part of the class behavior.
     private String formatRecentAnalysis(AuditTrail trail) {
+// Return this value to the method caller so the result can be used elsewhere.
         return String.format("%s | %.1f average | %s", trail.getTimestamp().toLocalDate(), controller.calculateOverallScore(trail.getResults()), trail.getVerdict());
     }
 
@@ -238,24 +259,30 @@ public class DashboardPage implements AppPage {
         );
     }
 
+// This method performs one part of the class behavior.
     private VBox createRecentCard(String text) {
         Label copy = new Label(text);
         copy.getStyleClass().add("details-label");
         copy.setWrapText(true);
         VBox card = new VBox(copy);
         card.getStyleClass().add("dashboard-card");
+// Return this value to the method caller so the result can be used elsewhere.
         return card;
     }
 
+// This method performs one part of the class behavior.
     private VBox createEmptyDetail(String message) {
         Label label = new Label(message);
         label.getStyleClass().add("details-label");
+// Return this value to the method caller so the result can be used elsewhere.
         return new VBox(label);
     }
 
+// This method performs one part of the class behavior.
     private Label createSectionHeader(String text) {
         Label label = new Label(text);
         label.getStyleClass().add("section-header");
+// Return this value to the method caller so the result can be used elsewhere.
         return label;
     }
 }

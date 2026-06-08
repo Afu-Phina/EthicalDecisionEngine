@@ -14,9 +14,11 @@ import view.AppNavigator;
  *
  * Design Pattern: MVC - Initializes the View component.
  */
+// is the starting point of the application and launches the JavaFX user interface.
 public class Main extends Application {
 
     @Override
+// is called by JavaFX to start the application window.
     public void start(Stage primaryStage) {
         new AppNavigator(primaryStage).show();
     }

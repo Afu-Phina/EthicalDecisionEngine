@@ -14,6 +14,7 @@ import model.AuditTrail;
  * 
  * Design Pattern: Service pattern - high-level reporting interface.
  */
+// handles exporting audit reports and managing the report folder.
 public class AuditReportService {
     private static final String REPORTS_DIR = "reports";
     private static final String FILENAME_PATTERN = "Ethics_Report_%s.pdf";
@@ -31,6 +32,7 @@ public class AuditReportService {
         String filepath = REPORTS_DIR + File.separator + filename;
 
         PdfAuditReportGenerator.generateReport(auditTrail, filepath);
+// Return this value to the method caller so the result can be used elsewhere.
         return filepath;
     }
 
@@ -47,6 +49,7 @@ public class AuditReportService {
 
     private static void ensureReportsDirectory() {
         File dir = new File(REPORTS_DIR);
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -55,6 +58,7 @@ public class AuditReportService {
     private static String generateTimestampedFilename() {
         LocalDateTime now = LocalDateTime.now();
         String timestamp = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+// Return this value to the method caller so the result can be used elsewhere.
         return String.format(FILENAME_PATTERN, timestamp);
     }
 }

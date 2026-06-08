@@ -21,9 +21,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.util.Duration;
 
+// creates a decorative animated background for the application UI.
 public class BackgroundVideoPane extends StackPane {
     private final ParallelTransition backgroundAnimation;
 
+// This method performs one part of the class behavior.
     public BackgroundVideoPane() {
         getStyleClass().add("background-media-pane");
         setPickOnBounds(false);
@@ -59,12 +61,14 @@ public class BackgroundVideoPane extends StackPane {
         backgroundAnimation.play();
     }
 
+// This method performs one part of the class behavior.
     private Pane createTechGridLayer() {
         Pane gridPane = new Pane();
         gridPane.setMouseTransparent(true);
         gridPane.prefWidthProperty().bind(widthProperty());
         gridPane.prefHeightProperty().bind(heightProperty());
 
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (int index = 1; index <= 12; index++) {
             double y = index * 76;
             Line line = new Line(0, y, 1600, y);
@@ -74,6 +78,7 @@ public class BackgroundVideoPane extends StackPane {
             gridPane.getChildren().add(line);
         }
 
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (int index = 1; index <= 18; index++) {
             double x = index * 88;
             Line line = new Line(x, 0, x, 920);
@@ -83,9 +88,11 @@ public class BackgroundVideoPane extends StackPane {
             gridPane.getChildren().add(line);
         }
 
+// Return this value to the method caller so the result can be used elsewhere.
         return gridPane;
     }
 
+// This method performs one part of the class behavior.
     private Pane createNetworkLayer() {
         Pane networkPane = new Pane();
         networkPane.setMouseTransparent(true);
@@ -102,6 +109,7 @@ public class BackgroundVideoPane extends StackPane {
                 {0, 1}, {1, 2}, {2, 3}, {3, 4}, {0, 5}, {1, 6}, {2, 9}, {3, 10}, {4, 11}, {5, 6}, {6, 7}, {7, 8}
         };
 
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (int[] link : connections) {
             double[] from = points[link[0]];
             double[] to = points[link[1]];
@@ -112,6 +120,7 @@ public class BackgroundVideoPane extends StackPane {
             networkPane.getChildren().add(line);
         }
 
+// Repeat the code inside this block for each item or while the loop condition remains true.
         for (double[] point : points) {
             Circle halo = new Circle(point[0], point[1], 12, Color.web("#38BDF8", 0.10));
             halo.setEffect(new BoxBlur(10, 10, 2));
@@ -133,9 +142,11 @@ public class BackgroundVideoPane extends StackPane {
         anchor.setMouseTransparent(true);
         networkPane.getChildren().add(anchor);
 
+// Return this value to the method caller so the result can be used elsewhere.
         return networkPane;
     }
 
+// This method performs one part of the class behavior.
     private Pane createDataFlowLayer() {
         Pane flowPane = new Pane();
         flowPane.setMouseTransparent(true);
@@ -167,9 +178,11 @@ public class BackgroundVideoPane extends StackPane {
         );
 
         flowPane.getChildren().addAll(flow, flow2);
+// Return this value to the method caller so the result can be used elsewhere.
         return flowPane;
     }
 
+// This method performs one part of the class behavior.
     private Pane createNodePulseLayer() {
         Pane pulsePane = new Pane();
         pulsePane.setMouseTransparent(true);
@@ -182,17 +195,21 @@ public class BackgroundVideoPane extends StackPane {
         Circle beacon4 = createGlowingNode(520, 540, 36, Color.web("#8b5cf6", 0.07));
 
         pulsePane.getChildren().addAll(beacon1, beacon2, beacon3, beacon4);
+// Return this value to the method caller so the result can be used elsewhere.
         return pulsePane;
     }
 
+// This method performs one part of the class behavior.
     private Circle createGlowingNode(double x, double y, double radius, Color color) {
         Circle node = new Circle(x, y, radius, color);
         node.setMouseTransparent(true);
         node.setEffect(new BoxBlur(20, 20, 3));
         node.setOpacity(0.68);
+// Return this value to the method caller so the result can be used elsewhere.
         return node;
     }
 
+// This method performs one part of the class behavior.
     private Pane createParticleField() {
         Pane particlePane = new Pane();
         particlePane.setMouseTransparent(true);
@@ -206,16 +223,20 @@ public class BackgroundVideoPane extends StackPane {
         particlePane.getChildren().add(createParticle(180, 560, 4.2, Color.web("#8b5cf6", 0.22)));
         particlePane.getChildren().add(createParticle(760, 600, 5.4, Color.web("#22d3ee", 0.26)));
 
+// Return this value to the method caller so the result can be used elsewhere.
         return particlePane;
     }
 
+// This method performs one part of the class behavior.
     private Circle createParticle(double x, double y, double radius, Color color) {
         Circle particle = new Circle(x, y, radius, color);
         particle.setEffect(new BoxBlur(6, 6, 2));
         particle.setMouseTransparent(true);
+// Return this value to the method caller so the result can be used elsewhere.
         return particle;
     }
 
+// This method performs one part of the class behavior.
     private ParallelTransition createBackgroundAnimation(Pane gridLayer, Pane particleLayer, Pane pulseLayer) {
         TranslateTransition gridMove = new TranslateTransition(Duration.seconds(48), gridLayer);
         gridMove.setFromX(-90);
@@ -249,9 +270,11 @@ public class BackgroundVideoPane extends StackPane {
                 particleMove6
         );
         parallel.setCycleCount(Animation.INDEFINITE);
+// Return this value to the method caller so the result can be used elsewhere.
         return parallel;
     }
 
+// This method performs one part of the class behavior.
     private TranslateTransition createParticleTransition(javafx.scene.Node node, double x, double y, double durationSeconds) {
         TranslateTransition transition = new TranslateTransition(Duration.seconds(durationSeconds), node);
         transition.setByX(x);
@@ -259,10 +282,13 @@ public class BackgroundVideoPane extends StackPane {
         transition.setAutoReverse(true);
         transition.setCycleCount(Animation.INDEFINITE);
         transition.setInterpolator(Interpolator.EASE_BOTH);
+// Return this value to the method caller so the result can be used elsewhere.
         return transition;
     }
 
+// This method performs one part of the class behavior.
     public void stop() {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (backgroundAnimation != null) {
             backgroundAnimation.stop();
         }

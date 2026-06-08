@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.util.Duration;
 
 public final class TransitionUtils {
+// This method performs one part of the class behavior.
     private TransitionUtils() {
     }
 

@@ -23,6 +23,7 @@ import model.Decision;
 import model.EthicalAnalysisResult;
 import report.AuditReportService;
 
+// provides the form for entering a new decision and running a fresh analysis.
 public class NewAnalysisPage implements AppPage {
     private final VBox root;
     private final EthicalAnalysisController controller;
@@ -31,12 +32,18 @@ public class NewAnalysisPage implements AppPage {
     private final Label liveVerdictLabel;
     private final Label liveConflictLabel;
     private final Label statusLabel;
+// This field stores data that the class uses.
     private TextArea decisionInput;
+// This field stores data that the class uses.
     private TextArea contextInput;
+// This field stores data that the class uses.
     private TextArea stakeholdersInput;
+// This field stores data that the class uses.
     private TextArea risksInput;
+// This field stores data that the class uses.
     private TextArea policiesInput;
 
+// This method performs one part of the class behavior.
     public NewAnalysisPage(EthicalAnalysisController controller, Consumer<AuditTrail> auditSink, AppNavigator navigator) {
         this.controller = controller;
         this.auditSink = auditSink;
@@ -70,20 +77,26 @@ public class NewAnalysisPage implements AppPage {
     }
 
     @Override
+// This method performs one part of the class behavior.
     public Node getView() {
+// Return this value to the method caller so the result can be used elsewhere.
         return root;
     }
 
     @Override
+// This method performs one part of the class behavior.
     public String getTitle() {
+// Return this value to the method caller so the result can be used elsewhere.
         return "New Analysis";
     }
 
     @Override
+// updates the page contents when the user navigates to it.
     public void refresh() {
         updateLiveScore();
     }
 
+// This method performs one part of the class behavior.
     private VBox createHeader() {
         Label title = new Label("New Ethical Analysis");
         title.getStyleClass().add("page-title");
@@ -91,9 +104,11 @@ public class NewAnalysisPage implements AppPage {
         Label subtitle = new Label("Capture decision context, assign stakeholders, and validate the ethical profile in real time.");
         subtitle.getStyleClass().add("page-subtitle");
 
+// Return this value to the method caller so the result can be used elsewhere.
         return new VBox(8, title, subtitle);
     }
 
+// This method performs one part of the class behavior.
     private GridPane createFormGrid() {
         decisionInput = createTextArea("Decision summary and required action...");
         contextInput = createTextArea("Context, environment, and background details...");
@@ -131,24 +146,30 @@ public class NewAnalysisPage implements AppPage {
         GridPane.setHgrow(right, Priority.ALWAYS);
         left.setMaxWidth(Double.MAX_VALUE);
         right.setMaxWidth(Double.MAX_VALUE);
+// Return this value to the method caller so the result can be used elsewhere.
         return formGrid;
     }
 
+// This method performs one part of the class behavior.
     private VBox createFieldGroup(String labelText, TextArea field) {
         Label label = new Label(labelText);
         label.getStyleClass().add("field-label");
+// Return this value to the method caller so the result can be used elsewhere.
         return new VBox(10, label, field);
     }
 
+// This method performs one part of the class behavior.
     private TextArea createTextArea(String placeholder) {
         TextArea area = new TextArea();
         area.setPromptText(placeholder);
         area.getStyleClass().add("input-area");
         area.setWrapText(true);
         area.setPrefRowCount(4);
+// Return this value to the method caller so the result can be used elsewhere.
         return area;
     }
 
+// This method performs one part of the class behavior.
     private HBox createActionRow() {
         Button analyzeButton = new Button("Analyze Ethics");
         analyzeButton.getStyleClass().add("primary-button");
@@ -160,9 +181,11 @@ public class NewAnalysisPage implements AppPage {
 
         HBox row = new HBox(14, analyzeButton, exportButton);
         row.getStyleClass().add("action-row");
+// Return this value to the method caller so the result can be used elsewhere.
         return row;
     }
 
+// This method performs one part of the class behavior.
     private VBox createLiveScoringCard() {
         Label title = new Label("Live Ethical Score");
         title.getStyleClass().add("card-title");
@@ -176,9 +199,11 @@ public class NewAnalysisPage implements AppPage {
                 liveConflictLabel
         );
         scoreCard.getStyleClass().add("dashboard-card");
+// Return this value to the method caller so the result can be used elsewhere.
         return scoreCard;
     }
 
+// This method performs one part of the class behavior.
     private void configureInputListeners() {
         decisionInput.textProperty().addListener((observable, oldValue, newValue) -> updateLiveScore());
         contextInput.textProperty().addListener((observable, oldValue, newValue) -> updateLiveScore());
@@ -187,8 +212,10 @@ public class NewAnalysisPage implements AppPage {
         policiesInput.textProperty().addListener((observable, oldValue, newValue) -> updateLiveScore());
     }
 
+// This method performs one part of the class behavior.
     private void updateLiveScore() {
         String description = decisionInput.getText().trim();
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (description.isEmpty()) {
             liveScoreLabel.setText("0.0/10");
             liveVerdictLabel.setText("Enter a decision summary to see live scoring.");
@@ -212,8 +239,10 @@ public class NewAnalysisPage implements AppPage {
         liveConflictLabel.setText(controller.detectConflicts(results));
     }
 
+// This method performs one part of the class behavior.
     private void executeAnalysis() {
         String description = decisionInput.getText().trim();
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (description.isEmpty()) {
             statusLabel.setText("Please include a decision summary before analyzing.");
             return;
@@ -233,7 +262,9 @@ public class NewAnalysisPage implements AppPage {
         updateLiveScore();
     }
 
+// This method performs one part of the class behavior.
     private void exportAuditTrail() {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (decisionInput.getText().trim().isEmpty()) {
             statusLabel.setText("Run an analysis before exporting the PDF report.");
             return;
@@ -256,6 +287,7 @@ public class NewAnalysisPage implements AppPage {
         fileChooser.setInitialFileName("Ethical_Decision_Report.pdf");
 
         File file = fileChooser.showSaveDialog(owner);
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (file == null) {
             return;
         }

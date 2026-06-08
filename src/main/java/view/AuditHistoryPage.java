@@ -25,6 +25,7 @@ import model.AuditTrail;
 import report.AuditReportService;
 
 @SuppressWarnings({"deprecation", "unchecked"})
+// shows a table of previous analyses and allows exporting audit reports.
 public class AuditHistoryPage implements AppPage {
     private final VBox root;
     private final TableView<AuditTrail> historyTable;
@@ -33,6 +34,7 @@ public class AuditHistoryPage implements AppPage {
     private final Label overviewLabel;
     private final Supplier<List<AuditTrail>> historySupplier;
 
+// This method performs one part of the class behavior.
     public AuditHistoryPage(Supplier<List<AuditTrail>> historySupplier) {
         this.historySupplier = historySupplier;
         this.root = new VBox(22);
@@ -63,7 +65,9 @@ public class AuditHistoryPage implements AppPage {
         searchField.textProperty().addListener((observable, oldText, newText) -> {
             String query = newText == null ? "" : newText.toLowerCase();
             filteredData.setPredicate(audit -> {
+// If the condition inside the parentheses is true, the code inside the block will run.
                 if (query.isBlank()) {
+// Return this value to the method caller so the result can be used elsewhere.
                     return true;
                 }
                 return audit.getDecision().getDescription().toLowerCase().contains(query)
@@ -84,22 +88,28 @@ public class AuditHistoryPage implements AppPage {
     }
 
     @Override
+// This method performs one part of the class behavior.
     public Node getView() {
+// Return this value to the method caller so the result can be used elsewhere.
         return root;
     }
 
     @Override
+// This method performs one part of the class behavior.
     public String getTitle() {
+// Return this value to the method caller so the result can be used elsewhere.
         return "Audit History";
     }
 
     @Override
+// updates the page contents when the user navigates to it.
     public void refresh() {
         List<AuditTrail> history = historySupplier.get();
         tableData.setAll(history);
         overviewLabel.setText(String.format("%d entries in audit history.", history.size()));
     }
 
+// This method performs one part of the class behavior.
     private void initializeTableColumns() {
         TableColumn<AuditTrail, String> dateColumn = new TableColumn<>("Date");
         dateColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getTimestamp().toLocalDate().toString()));
@@ -127,11 +137,15 @@ public class AuditHistoryPage implements AppPage {
         historyTable.getColumns().addAll(dateColumn, decisionColumn, verdictColumn, scoreColumn);
     }
 
+// This method performs one part of the class behavior.
     private double controllerAverageScore(AuditTrail auditTrail) {
+// Return this value to the method caller so the result can be used elsewhere.
         return auditTrail.getResults().stream().mapToDouble(result -> result.getScore()).average().orElse(0.0);
     }
 
+// This method performs one part of the class behavior.
     private void exportHistory() {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (tableData.isEmpty()) {
             overviewLabel.setText("There is nothing to export yet.");
             return;
@@ -144,6 +158,7 @@ public class AuditHistoryPage implements AppPage {
         fileChooser.setInitialFileName("Ethical_Audit_Report.pdf");
 
         File file = fileChooser.showSaveDialog(owner);
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (file == null) {
             return;
         }

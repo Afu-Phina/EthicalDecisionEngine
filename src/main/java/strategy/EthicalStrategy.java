@@ -18,6 +18,7 @@ import model.EthicalAnalysisResult;
  * - Abstraction: Defines an abstract interface for ethical analysis.
  * - Polymorphism: Different implementations will provide their own versions of analyzeDecision.
  */
+// defines the interface that all ethical frameworks must implement.
 public interface EthicalStrategy {
     /**
      * Analyzes a given decision using the specific ethical framework.

@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.AuditTrail;
 
+// sets up the main application window, the sidebar, and page switching logic.
 public class AppNavigator {
     private final Stage primaryStage;
     private final BorderPane rootLayout;
@@ -30,8 +31,10 @@ public class AppNavigator {
     private final Map<String, AppPage> pages = new LinkedHashMap<>();
     private final List<AuditTrail> auditHistory = new ArrayList<>();
     private final BackgroundVideoPane backgroundPane;
+// This field stores data that the class uses.
     private boolean darkTheme = true;
 
+// This method performs one part of the class behavior.
     public AppNavigator(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.controller = new EthicalAnalysisController();
@@ -63,6 +66,7 @@ public class AppNavigator {
         System.out.println("[UI] Loading stylesheet: " + cssPath);
         Scene scene = new Scene(masterPane, 1280, 840);
         scene.getStylesheets().add(cssPath);
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (backgroundPane != null) {
             System.out.println("[UI] BackgroundVideoPane present: " + backgroundPane.getClass().getSimpleName());
         }
@@ -75,6 +79,7 @@ public class AppNavigator {
         switchToPage("Dashboard");
     }
 
+// This method performs one part of the class behavior.
     private void buildPages() {
         pages.put("Dashboard", new DashboardPage(controller, this::getAuditHistory));
         pages.put("New Analysis", new NewAnalysisPage(controller, this::addAuditTrail, this));
@@ -83,13 +88,16 @@ public class AppNavigator {
         pages.put("Settings", new SettingsPage(this::setDarkTheme, () -> darkTheme));
     }
 
+// This method performs one part of the class behavior.
     private void configureSidebar() {
         pages.keySet().forEach(page -> sidebar.addItem(page, () -> switchToPage(page)));
         sidebar.addExitItem("Exit", this::confirmExit);
     }
 
+// This method performs one part of the class behavior.
     private void switchToPage(String title) {
         AppPage page = pages.get(title);
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (page == null) {
             return;
         }
@@ -99,17 +107,21 @@ public class AppNavigator {
         sidebar.setActive(title);
     }
 
+// This method performs one part of the class behavior.
     private void setPageContent(Node pageNode) {
         centerPane.getChildren().setAll(pageNode);
         TransitionUtils.applySlideFadeIn(pageNode);
     }
 
+// This method performs one part of the class behavior.
     private void confirmExit() {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (showExitConfirmation()) {
             performExit();
         }
     }
 
+// This method performs one part of the class behavior.
     private boolean showExitConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Exit Application");
@@ -121,10 +133,13 @@ public class AppNavigator {
         alert.getButtonTypes().setAll(exitButton, cancelButton);
 
         Optional<ButtonType> result = alert.showAndWait();
+// Return this value to the method caller so the result can be used elsewhere.
         return result.isPresent() && result.get() == exitButton;
     }
 
+// This method performs one part of the class behavior.
     private void performExit() {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (backgroundPane != null) {
             backgroundPane.stop();
         }
@@ -132,20 +147,26 @@ public class AppNavigator {
         System.exit(0);
     }
 
+// This method performs one part of the class behavior.
     private List<AuditTrail> getAuditHistory() {
+// Return this value to the method caller so the result can be used elsewhere.
         return List.copyOf(auditHistory);
     }
 
+// This method performs one part of the class behavior.
     private void addAuditTrail(AuditTrail auditTrail) {
         auditHistory.add(0, auditTrail);
         pages.values().forEach(AppPage::refresh);
     }
 
+// This method performs one part of the class behavior.
     private void setDarkTheme(boolean enabled) {
+// If the condition inside the parentheses is true, the code inside the block will run.
         if (enabled) {
             rootLayout.getStyleClass().remove("light-theme");
             darkTheme = true;
         } else {
+// If the condition inside the parentheses is true, the code inside the block will run.
             if (!rootLayout.getStyleClass().contains("light-theme")) {
                 rootLayout.getStyleClass().add("light-theme");
             }
@@ -153,6 +174,7 @@ public class AppNavigator {
         }
     }
 
+// shows the current page or application window.
     public void show() {
         primaryStage.show();
         FadeTransition fade = new FadeTransition(Duration.millis(900), primaryStage.getScene().getRoot());
