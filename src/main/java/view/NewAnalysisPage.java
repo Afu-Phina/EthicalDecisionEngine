@@ -28,6 +28,7 @@ public class NewAnalysisPage implements AppPage {
     private final VBox root;
     private final EthicalAnalysisController controller;
     private final Consumer<AuditTrail> auditSink;
+    private final AppNavigator navigator;
     private final Label liveScoreLabel;
     private final Label liveVerdictLabel;
     private final Label liveConflictLabel;
@@ -263,6 +264,7 @@ public class NewAnalysisPage implements AppPage {
     }
 
 // This method performs one part of the class behavior.
+    @SuppressWarnings("unused")
     private void exportAuditTrail() {
 // If the condition inside the parentheses is true, the code inside the block will run.
         if (decisionInput.getText().trim().isEmpty()) {
@@ -278,7 +280,7 @@ public class NewAnalysisPage implements AppPage {
                 policiesInput.getText().trim()
         );
         List<EthicalAnalysisResult> results = controller.analyzeDecision(decision);
-        AuditTrail auditTrail = controller.buildAuditTrail(decision, results);
+        AuditTrail reportTrail = controller.buildAuditTrail(decision, results);
 
         Window owner = root.getScene() == null ? null : root.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
@@ -293,7 +295,7 @@ public class NewAnalysisPage implements AppPage {
         }
 
         try {
-            AuditReportService.exportAuditReportToPath(auditTrail, file.getAbsolutePath());
+            AuditReportService.exportAuditReportToPath(reportTrail, file.getAbsolutePath());
             statusLabel.setText("PDF report exported to " + file.getName() + ".");
         } catch (IOException e) {
             statusLabel.setText("Failed to export PDF report: " + e.getMessage());
